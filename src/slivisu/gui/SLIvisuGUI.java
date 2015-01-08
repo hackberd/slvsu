@@ -35,9 +35,12 @@ import slivisu.gui.globalcontrols.timescale.TimeScale;
 import slivisu.mapper.SlivisuGlobeData;
 import slivisu.mapper.SlivisuHistogramData;
 import slivisu.mapper.SlivisuObservationsTableModel;
+import slivisu.mapper.SuperDataImp;
 import slivisu.view.globe.SliGlobe;
 import slivisu.view.globe.SliGlobePopupMenu;
 import slivisu.view.histogram.HistogramController;
+import slivisu.view.myviews.SuperData;
+import slivisu.view.myviews.Uebersicht;
 import slivisu.view.table.AttributeTables;
 
 
@@ -139,19 +142,19 @@ public class SLIvisuGUI extends JFrame {
 	 */
 	private Map<String, View> initialViews(Data data) {
 		Map<String, View> viewPanel = new HashMap<String, View>();
-
+		// Map
 		viewControl.setStatus(" Build views .. globe");
 		SlivisuGlobeData globeData = new SlivisuGlobeData(data);
 		SliGlobe globe = new SliGlobe(globeData);
 		globe.setPopupMenu(new SliGlobePopupMenu(globe));
 		viewPanel.put("globe", new View("Geographic distribution (Globe)", null, globe));		
 		viewControl.addInteractionListener(globe);
-		
+		// Histrogramm
 		viewControl.setStatus(" Build views .. histogram ");
 		HistogramController histogram = new HistogramController(new SlivisuHistogramData(data));
 		viewPanel.put("histogram", new View("Time histogram", null, histogram));
 		viewControl.addInteractionListener(histogram);
-
+		// Tabelle
 		if (showListing){
 			viewControl.setStatus(" Build views .. SLI tables");
 			Map<String, SlivisuObservationsTableModel> attributeData = new HashMap<String, SlivisuObservationsTableModel>();
@@ -160,25 +163,38 @@ public class SLIvisuGUI extends JFrame {
 			viewControl.addInteractionListener(attributeTable);
 			viewPanel.put("listing", new View("Listing", null, attributeTable));
 		}
-
+		// Uebersicht
+		Uebersicht uebersichtView = new Uebersicht(new SuperDataImp(data));
+		// ODER EINFACHE VARIANTE: MeineVis vis = new MeineVis(data);
+		viewPanel.put("UebersichtView",new View("UebersichtView", null, uebersichtView));
+		viewControl.addInteractionListener(uebersichtView);
+		// End adding
 		return viewPanel;
 	}
 
 	private DockingWindow getDefaultLayout(Map<String, View> viewPanel) {
-
+		
 		// Sea Level Curve
 		DockingWindow s0 = viewPanel.get("histogram");
 		// mit Globe vertikal gruppieren --> Gruppe 1
 		s0 = new SplitWindow(false, 0.5f, s0, viewPanel.get("globe"));
 		
+		// FALSE = untereinander
+		// TRUE NEBEN
+		
 		// Tabelle und Datenbankhierarchie f�r Beobachtungsdaten horizontal gruppieren
 		DockingWindow s01 = viewPanel.get("listing");
+		// get uebersicht
+		s01 = new SplitWindow(false, 0.5f,  viewPanel.get("UebersichtView"),s01);
+		
 		// Parameterdarstellungen und Beobachtungsdaten vertikal --> Gruppe 2
 		//s01 = new SplitWindow(false, 0.6f, s01, s03);
 		
 		// Gruppe 1 und Gruppe 2 horizontal
 		DockingWindow s2 = new SplitWindow(true, 0.3f, s0 , s01);
 
+		
+		
 		return s2;
 	}
 

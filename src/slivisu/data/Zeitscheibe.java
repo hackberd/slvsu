@@ -11,6 +11,7 @@ public class Zeitscheibe {
 	
 	int anfang = 0;
 	int ende = 0;
+
 	
 	public String getName() {
 		return name;
