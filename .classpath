@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="jar/bislider1.5.2.jar"/>
+	<classpathentry kind="lib" path="jar/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="jar/GroupableTable.jar"/>
+	<classpathentry kind="lib" path="jar/idw-gpl.jar"/>
+	<classpathentry kind="lib" path="jar/jogl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Slivisu_Siedlungsdaten/lib64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="jar/lablib-checkboxtree-3.2.jar"/>
+	<classpathentry kind="lib" path="jar/postgresql-9.0-801.jdbc4.jar"/>
+	<classpathentry kind="lib" path="jar/worldwind.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Slivisu_Siedlungsdaten/lib64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="jar/worldwindx.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Slivisu_Siedlungsdaten/lib64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

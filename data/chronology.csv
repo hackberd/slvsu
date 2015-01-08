@@ -1,0 +1,77 @@
+Ebene,Start,Ende,Kurzform,Name
+1,-2250,-50,PROTOHISTO,Protohistoire
+1,-120,2001,HISTOIRE,Histoire
+2,-2250,-750,AGE_DU_BRO,âge du Bronze
+2,-800,-52,AGE_DU_FER,âge du fer
+2,-120,443,GALLO_ROMA,gallo-romaine
+2,443,1492,MOYEN_AGE,Moyen Age
+3,-2250,-1650,BRONZE_ANC,âge du Bronze ancien
+3,-1350,-750,BRONZE_FIN,âge du Bronze final
+3,-800,-450,PREMIER_AG,premier âge du fer
+3,-500,-52,SECOND_AGE,second âge du fer
+3,-120,-27,REPUBLIQUE,République
+3,-27,293,HAUT_EMPIR,Haut Empire
+3,293,476,BAS_EMPIRE,Bas Empire
+3,443,1032,HAUT_MOYEN,Haut Moyen Age
+3,937,1349,MOYEN_AG_1,Moyen Age classique
+4,-1400,-1300,BZ_FINAL_1,Bz final 1
+4,-1300,-1020,BZ_FINAL_2,Bz final 2
+4,-1020,-700,BZ_FINAL_3,Bz final 3
+4,-1200,-1050,HA_A,Ha A
+4,-1050,-800,HA_B,Ha B
+4,-800,-650,HA_C,Ha C
+4,-650,-475,HA_D,Ha D
+4,-475,-375,LT_A_LT_I,Lt A
+4,-375,-275,LT_B_LT_II,Lt B
+4,-275,-15,LT_C__T_II,Lt C
+4,-130,-25,LT_FINAL,La Téne finale
+4,-150,-25,LT_D_LT_IV,LT D
+4,-800,-700,EZ_8__Jh_,EZ 8. Jh. v. Chr.
+4,-700,-600,EZ__7__Jh_,EZ 7. Jh. v. Chr.
+4,-600,-500,EZ__6__Jh_,EZ 6. Jh. v. Chr.
+4,-500,-400,EZ__5__Jh_,EZ 5. Jh. v. Chr.
+4,-400,-300,EZ__4__Jh_,EZ 4. Jh. v. Chr.
+4,-300,-200,EZ__3__Jh_,EZ 3. Jh. v. Chr.
+4,-200,-100,RE_2___Jh_,RE 2. Jh. v. Chr
+4,-100,0,RE_1__Jh_,RE 1. Jh. v. Chr.
+4,0,100,HE_1__Jh_,HE 1. Jh. n. Chr.
+4,100,200,HE_2__Jh_,HE 2. Jh. n. Chr.
+4,200,300,HE_3__Jh_,HE 3. Jh. n. Chr.
+4,300,400,BE_4__Jh_,BE 4. Jh. n. Chr.
+4,400,500,BE_5__Jh_,BE 5. Jh. n. Chr.
+5,-1300,-1200,BRF_2A,BRF 2a
+5,-1200,-1020,BRF_2B,BRF 2b
+5,-1020,-920,BRF_3A,BRF 3a
+5,-920,-700,BRF_3B,BRF 3b
+5,-1200,-1100,HA_A1,Ha A1
+5,-1100,-1050,HA_A2,Ha A2
+5,-1050,-950,HA_B1,Ha B1
+5,-950,-880,HA_B2,Ha B2
+5,-880,-800,HA_B3,Ha B3
+5,-800,-700,HA_C1,Ha C1
+5,-700,-650,HA_C2,Ha C2
+5,-650,-550,HA_D1,Ha D1
+5,-550,-525,HA_D2,Ha D2
+5,-525,-475,HA_D3,Ha D3
+5,-475,-440,LT_A1,Lt A1
+5,-440,-375,LT_A2,Lt A2
+5,-375,-325,LT_B1,Lt B1
+5,-325,-275,LT_B2,Lt B2
+5,-275,-200,LT_C1,Lt C1
+5,-200,-150,LT_C2,Lt C2
+5,-150,-80,LT_D1,Lt D1
+5,-80,-25,LT_D2,Lt D2
+5,-200,-150,RE_1__H__2,RE 1. H. 2. Jh. v. Chr.
+5,-150,-100,RE_2__H__2,RE 2. H. 2. Jh. v. Chr.
+5,-100,-50,RE_1__H__1,RE 1. H. 1. Jh. v. Chr.
+5,-50,0,HE_2__H__1,HE 2. H. 1. Jh. v. Chr.
+5,0,50,HE_1__H__1,HE 1. H. 1. Jh. n. Chr.
+5,50,100,HE_2__H__2,HE 2. H. 1. Jh. n. Chr.
+5,100,150,HE_1__H__2,HE 1. H. 2. Jh. n. Chr.
+5,150,200,HE_2__H__3,HE 2. H. 2. Jh. n. Chr.
+5,200,250,HE_1__H__3,HE 1. H. 3. Jh. n. Chr.
+5,250,300,HE_2__H__4,HE 2. H. 3. Jh. n. Chr.
+5,300,350,BE_1__H__4,BE 1. H. 4. Jh. n. Chr.
+5,350,400,BE_2__H__4,BE 2. H. 4. Jh. n. Chr.
+5,400,450,BE_1__H__5,BE 1. H. 5. Jh. n. Chr.
+5,450,500,BE_2__H__5,BE 2. H. 5. Jh. n. Chr.
