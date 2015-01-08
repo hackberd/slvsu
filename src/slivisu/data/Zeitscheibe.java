@@ -48,4 +48,6 @@ public class Zeitscheibe {
 		return new Bin<Double>((double) anfang, (double) ende);
 	}
 	
+	
+	
 }

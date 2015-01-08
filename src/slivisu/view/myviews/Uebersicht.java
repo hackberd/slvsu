@@ -15,9 +15,9 @@ public class Uebersicht extends JPanel implements InteractionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	
+	SuperData data;
 	public Uebersicht(SuperData data){
-	
+		this.data = data;
 	}
 	
 	/* (non-Javadoc)
@@ -25,8 +25,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	 */
 	@Override
 	public void updateView() {
-		// TODO Auto-generated method stub
-
+		this.data.updateDataToSelectedData();
 	}
 
 	/* (non-Javadoc)

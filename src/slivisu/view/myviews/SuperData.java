@@ -5,8 +5,8 @@ import java.util.List;
 import slivisu.data.MyZeitscheibe;
 
 public interface SuperData {
-	// Sinnlos?
-	//public void updateData();
+	
+	public void updateDataToSelectedData();
 	
 	/***
 	 * Gibt eine Liste mit allen Ebenen zurück

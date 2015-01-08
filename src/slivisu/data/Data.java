@@ -11,7 +11,7 @@ import slivisu.gui.controller.InteractionController;
 import slivisu.gui.globalcontrols.timescale.TimeScaleData;
 
 /**
- * das Haupt-Datenobjekt in Slivisu mit allen global verfügbaren Datenstrukturen und Selektionen 
+ * das Haupt-Datenobjekt in Slivisu mit allen global verfï¿½gbaren Datenstrukturen und Selektionen 
  * 
  * @author unger
  *
@@ -117,6 +117,10 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 
 	public TimeScaleData getTimeRange() {
 		return timeRange;
+	}
+	
+	public Selection<Sample> getAllSamples() {
+		return allSamples;
 	}
 
 	public ObservationTableData getObservationTableData() {
