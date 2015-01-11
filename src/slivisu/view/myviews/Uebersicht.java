@@ -129,6 +129,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 				int xMax	= 0;
 				int yMin	= 0;
 				int yMax	= 0;
+				
 				List<Balken> hitted = new LinkedList<Balken>();
 				
 				// Rahmen zeichnen
@@ -211,11 +212,31 @@ public class Uebersicht extends JPanel implements InteractionListener {
 				}
 				
 				if ((startSelection != null) && (endSelection != null)) {
+					Point start	= new Point();
+					int width 	= 0;
+					int height	= 0;
+					
+					if (startSelection.getX() > endSelection.getX()) {
+						width = (int) (startSelection.getX() - endSelection.getX());
+						start.setLocation(endSelection.getX(), start.getY());
+					} else {
+						width = (int) (endSelection.getX() - startSelection.getX());
+						start.setLocation(startSelection.getX(), start.getY());
+					}
+					
+					if (startSelection.getY() > endSelection.getY()) {
+						height = (int) (startSelection.getY() - endSelection.getY());
+						start.setLocation(start.getX(), endSelection.getY());
+					} else {
+						height = (int) (endSelection.getY() - startSelection.getY());
+						start.setLocation(start.getX(), startSelection.getY());
+					}
 					g2d.setColor(Color.BLUE);
-					Rectangle2D selRect = new  Rectangle((int) startSelection.getX(),
-							(int) startSelection.getY(),
-							(int) (endSelection.getX() - startSelection.getX()),
-							(int) (endSelection.getY() - startSelection.getY()));
+					Rectangle2D selRect = new  Rectangle(
+							(int) start.getX(),
+							(int) start.getY(),
+							width,
+							height);
 					g2d.draw(selRect);
 					for (Balken bar : balken) {
 						Rectangle2D rect = bar.getRect();
