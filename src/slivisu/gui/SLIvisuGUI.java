@@ -35,10 +35,12 @@ import slivisu.gui.globalcontrols.timescale.TimeScale;
 import slivisu.mapper.SlivisuGlobeData;
 import slivisu.mapper.SlivisuHistogramData;
 import slivisu.mapper.SlivisuObservationsTableModel;
-import slivisu.mapper.SuperDataImp;
+import slivisu.mapper.SuperDataDetailImp;
+import slivisu.mapper.SuperDataUebersichtImp;
 import slivisu.view.globe.SliGlobe;
 import slivisu.view.globe.SliGlobePopupMenu;
 import slivisu.view.histogram.HistogramController;
+import slivisu.view.myviews.Detail;
 import slivisu.view.myviews.SuperDataUebersicht;
 import slivisu.view.myviews.Uebersicht;
 import slivisu.view.table.AttributeTables;
@@ -164,10 +166,16 @@ public class SLIvisuGUI extends JFrame {
 			viewPanel.put("listing", new View("Listing", null, attributeTable));
 		}
 		// Uebersicht
-		Uebersicht uebersichtView = new Uebersicht(new SuperDataImp(data));
+		Uebersicht uebersichtView = new Uebersicht(new SuperDataUebersichtImp(data));
 		// ODER EINFACHE VARIANTE: MeineVis vis = new MeineVis(data);
 		viewPanel.put("UebersichtView",new View("UebersichtView", null, uebersichtView));
 		viewControl.addInteractionListener(uebersichtView);
+		// Details
+		Detail detailView = new Detail(new SuperDataDetailImp(data));
+		// ODER EINFACHE VARIANTE: MeineVis vis = new MeineVis(data);
+		viewPanel.put("DetailView",new View("DetailView", null, detailView));
+		viewControl.addInteractionListener(detailView);
+		
 		// End adding
 		return viewPanel;
 	}
@@ -182,16 +190,30 @@ public class SLIvisuGUI extends JFrame {
 		// FALSE = untereinander
 		// TRUE NEBEN
 		
+		
+		
+		// Detail view
+		DockingWindow detailViewDockingWindow = viewPanel.get("DetailView");
+		
 		// Tabelle und Datenbankhierarchie f�r Beobachtungsdaten horizontal gruppieren
-		DockingWindow s01 = viewPanel.get("listing");
+		DockingWindow completeRightView = viewPanel.get("UebersichtView");
+		
+		
+		DockingWindow listing = viewPanel.get("listing");
+		DockingWindow listingAndDetail = new SplitWindow(false, 0.5f, detailViewDockingWindow, listing);
+		
 		// get uebersicht
-		s01 = new SplitWindow(false, 0.5f,  viewPanel.get("UebersichtView"),s01);
+		completeRightView = new SplitWindow(false, 0.5f, completeRightView, listingAndDetail);
+		
+		
+		
+		
 		
 		// Parameterdarstellungen und Beobachtungsdaten vertikal --> Gruppe 2
 		//s01 = new SplitWindow(false, 0.6f, s01, s03);
 		
 		// Gruppe 1 und Gruppe 2 horizontal
-		DockingWindow s2 = new SplitWindow(true, 0.3f, s0 , s01);
+		DockingWindow s2 = new SplitWindow(true, 0.3f, s0 , completeRightView);
 
 		
 		

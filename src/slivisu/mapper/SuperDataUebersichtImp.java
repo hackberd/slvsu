@@ -19,7 +19,7 @@ import slivisu.data.Zeitscheibe;
 import slivisu.data.datatype.Bin;
 import slivisu.view.myviews.SuperDataUebersicht;
 
-public class SuperDataImp implements SuperDataUebersicht {
+public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	// Internal
 	Data data;
 	ObservationData observationData;
@@ -34,7 +34,7 @@ public class SuperDataImp implements SuperDataUebersicht {
 	List<List<MyZeitscheibe>> lastFocus;
 	
 	
-	public SuperDataImp(Data data) {
+	public SuperDataUebersichtImp(Data data) {
 		this.data = data;
 		this.observationData = data.getObservationData();
 		
@@ -247,6 +247,18 @@ public class SuperDataImp implements SuperDataUebersicht {
 		this.updateDataToSelectedData();
 		
 		return null;
+	}
+
+	@Override
+	public List<Boolean> getFilter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setFilter(List<Boolean> settings) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
