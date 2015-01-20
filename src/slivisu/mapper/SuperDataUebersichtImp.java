@@ -27,6 +27,7 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	private List<MyZeitscheibe> allZeitscheibenInternal;
 	int lastAllCount = 0;
 	
+	List<Boolean> filter;
 	
 	// Ausgaben
 	List<List<MyZeitscheibe>> allData;	
@@ -36,6 +37,7 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	public SuperDataUebersichtImp(Data data) {
 		this.data = data;
 		this.observationData = data.getObservationData();
+		getFilter();
 		
 		this.updateDataToSelectedData();
 	}
@@ -66,12 +68,13 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 				Map<Zeitscheibe, Double> map = observationData.getDatierung(sample);
 				for (MyZeitscheibe zeitscheibe : alleZeitscheiben) {
 					Double wert = map.get(zeitscheibe.getOriginalZeitscheibe());
-					if (wert != 0) {// ist drin
+					//System.out.println("draw ebene " + zeitscheibe.getEbene() + " " + this.getFilter().get(zeitscheibe.getEbene() - 1));
+					if (wert != 0  && this.getFilter().get(zeitscheibe.getEbene() - 1)) {// ist drin und soll angezeigt werden
 						// einsetzen
 						if (!allDataTemp.get(zeitscheibe.getEbene() -1).contains(zeitscheibe)) {
 							allDataTemp.get(zeitscheibe.getEbene() -1).add(zeitscheibe);
 						}
-						
+						//System.out.println("draw ebene " + zeitscheibe.getEbene() + " " + this.getFilter().get(zeitscheibe.getEbene() - 1));
 						// ebenen finden
 						if (zeitscheibe.getEbene() < obersteEbene) obersteEbene = zeitscheibe.getEbene();
 						if (zeitscheibe.getEbene() > untersteEbene) untersteEbene = zeitscheibe.getEbene();
@@ -224,14 +227,20 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 
 	@Override
 	public List<Boolean> getFilter() {
-		// TODO Auto-generated method stub
-		return null;
+		if (this.filter == null) {
+			this.filter = new LinkedList<Boolean>();
+			this.filter.add(true); 
+			this.filter.add(true); 
+			this.filter.add(true); 
+			this.filter.add(true); 
+			this.filter.add(true); 
+		}
+		return this.filter;
 	}
 
 	@Override
 	public void setFilter(List<Boolean> settings) {
-		// TODO Auto-generated method stub
-		
+		this.filter = settings;
 	}
 	
 

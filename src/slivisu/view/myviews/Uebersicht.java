@@ -9,11 +9,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.ToolTipManager;
 
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.datatype.Balken;
@@ -45,6 +47,8 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	private Point startSelection;
 	private Point endSelection;
 	
+	public String tooltip;
+	
 	// TODO: Auswahl machen
 	
 	public Uebersicht(SuperDataUebersicht data){
@@ -53,7 +57,24 @@ public class Uebersicht extends JPanel implements InteractionListener {
 		listener = new UebersichtListener(this);
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
+		
+		ToolTipManager.sharedInstance().registerComponent( this);
+		ToolTipManager.sharedInstance().setInitialDelay(0) ;
+		
 	}
+	
+	public String getToolTipText( MouseEvent e )
+    {
+		if (tooltip != null) {
+			return tooltip;
+		}
+        return "";
+    }
+
+    public Point getToolTipLocation(MouseEvent e)
+    {
+        return e.getPoint();
+    }
 	
 	/* (non-Javadoc)
 	 * @see slivisu.gui.controller.InteractionListener#updateView()
@@ -67,12 +88,16 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			balken = new LinkedList<Balken>();
 			
 			// �ber Zeitscheiben der ersten Ebene iterieren und min und max der Zeit ermitteln
-			for (MyZeitscheibe scheibe : data.getAllData().get(0)) {
-				if (scheibe.getEbene() == 1) {
-					if (scheibe.getAnfang() < min) min = scheibe.getAnfang();
-					if (scheibe.getEnde() > max) max = scheibe.getEnde();
+			
+			for (int i = 0; i < 5; i++) {
+				if (data.getAllData().get(i).size() != 0) {
+					for (MyZeitscheibe scheibe : data.getAllData().get(i)) {
+						if (scheibe.getAnfang() < min) min = scheibe.getAnfang();
+						if (scheibe.getEnde() > max) max = scheibe.getEnde();
+					}
 				}
 			}
+				
 			rangeTime = max - min;
 			rangeEbenen = data.getAllData().size();
 			
@@ -120,7 +145,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	
 	public void paintUebersicht(Graphics g) {
 		if (data != null) {
-			if (balken != null) {
+			if (balken != null && balken.get(0) != null) {
 				// Variablen
 				int xMin	= 0;
 				int xMax	= 0;
