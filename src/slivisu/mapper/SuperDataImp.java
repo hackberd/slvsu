@@ -17,9 +17,9 @@ import slivisu.data.ObservationData;
 import slivisu.data.Sample;
 import slivisu.data.Zeitscheibe;
 import slivisu.data.datatype.Bin;
-import slivisu.view.myviews.SuperData;
+import slivisu.view.myviews.SuperDataUebersicht;
 
-public class SuperDataImp implements SuperData {
+public class SuperDataImp implements SuperDataUebersicht {
 	// Internal
 	Data data;
 	ObservationData observationData;

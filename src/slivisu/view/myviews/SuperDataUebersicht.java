@@ -4,7 +4,7 @@ import java.util.List;
 
 import slivisu.data.MyZeitscheibe;
 
-public interface SuperData {
+public interface SuperDataUebersicht {
 	
 	public void updateDataToSelectedData();
 	

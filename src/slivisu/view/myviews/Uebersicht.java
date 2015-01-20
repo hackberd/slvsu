@@ -9,11 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +32,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	
 	// Variablen
 	private List<Balken> balken;
-	private SuperData data;
+	private SuperDataUebersicht data;
 	private UebersichtListener listener;
 	
 	private Graphics2D graphic;
@@ -51,7 +47,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	
 	// TODO: Auswahl machen
 	
-	public Uebersicht(SuperData data){
+	public Uebersicht(SuperDataUebersicht data){
 		this.data = data;
 		
 		listener = new UebersichtListener(this);
@@ -70,7 +66,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			// Variablen initialisieren
 			balken = new LinkedList<Balken>();
 			
-			// über Zeitscheiben der ersten Ebene iterieren und min und max der Zeit ermitteln
+			// ï¿½ber Zeitscheiben der ersten Ebene iterieren und min und max der Zeit ermitteln
 			for (MyZeitscheibe scheibe : data.getAllData().get(0)) {
 				if (scheibe.getEbene() == 1) {
 					if (scheibe.getAnfang() < min) min = scheibe.getAnfang();
@@ -80,7 +76,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			rangeTime = max - min;
 			rangeEbenen = data.getAllData().size();
 			
-			// über alle ebenen und zeitscheiben iterieren
+			// ï¿½ber alle ebenen und zeitscheiben iterieren
 			for (int cntEbene = 0; cntEbene < data.getAllData().size(); cntEbene++) {
 				for (MyZeitscheibe scheibe : data.getAllData().get(cntEbene)) {
 					balken.add(new Balken(	scheibe,
@@ -142,7 +138,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 				// Balken zeichnen
 				g2d.setColor(Color.RED);
 				for (Balken bar : balken) {
-					// berechne Koordinaten für Balken
+					// berechne Koordinaten fï¿½r Balken
 					xMin	= (int)	(				  PADDING + ( (double) (bar.getAnfang() - min) / (double) rangeTime) * (this.getWidth() - 2*PADDING));
 					xMax	= (int)	(this.getWidth() - PADDING - ( (double) (max - bar.getEnde()) / (double) rangeTime)   * (this.getWidth() - 2*PADDING));
 					

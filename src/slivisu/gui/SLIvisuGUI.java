@@ -39,7 +39,7 @@ import slivisu.mapper.SuperDataImp;
 import slivisu.view.globe.SliGlobe;
 import slivisu.view.globe.SliGlobePopupMenu;
 import slivisu.view.histogram.HistogramController;
-import slivisu.view.myviews.SuperData;
+import slivisu.view.myviews.SuperDataUebersicht;
 import slivisu.view.myviews.Uebersicht;
 import slivisu.view.table.AttributeTables;
 
