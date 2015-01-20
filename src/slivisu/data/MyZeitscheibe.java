@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MyZeitscheibe extends Zeitscheibe {
-	int anzahlSichereSiedlungen = 0;
-	int anzahlUnsichereSiedlungen = 0;
+	Set<Sample> sichereSiedlungen;
+	Set<Sample> unsichereSiedlungen;
 	Zeitscheibe originalZeitscheibe;
 	Set<Sample> alleSamplesInZeitscheibe;
 
@@ -18,33 +18,30 @@ public class MyZeitscheibe extends Zeitscheibe {
 		this.setName(zs.getName());
 		originalZeitscheibe = zs;
 		alleSamplesInZeitscheibe = new HashSet<Sample>();
+		sichereSiedlungen = new HashSet<Sample>();
+		unsichereSiedlungen = new HashSet<Sample>();
 	}
 	
-	public void addSample(Sample sample) {
+	public synchronized void addSample(Sample sample) {
 		this.alleSamplesInZeitscheibe.add(sample);
 	}
 	
 	public int getAnzahlSichereSiedlungen() {
-		return anzahlSichereSiedlungen;
-	}
-	public void setAnzahlSichereSiedlungen(int anzahlSichereSiedlungen) {
-		this.anzahlSichereSiedlungen = anzahlSichereSiedlungen;
+		return this.sichereSiedlungen.size();
 	}
 	
-	public void increaseAnzahlSichereSiedlungen() {
-		this.anzahlSichereSiedlungen++;
+	
+	public void addSichereSiedlung(Sample sample) {
+		this.sichereSiedlungen.add(sample);
 	}
 	
 	public int getAnzahlUnsichereSiedlungen() {
-		return anzahlUnsichereSiedlungen;
+		return this.unsichereSiedlungen.size();
 	}
-	public void setAnzahlUnsichereSiedlungen(int anzahlUnsichereSiedlungen) {
-		this.anzahlUnsichereSiedlungen = anzahlUnsichereSiedlungen;
+	public void addUnsichereSiedlung(Sample sample) {
+		this.unsichereSiedlungen.add(sample);
 	}
-	
-	public void increaseAnzahlUnsichereSiedlungen() {
-		this.anzahlUnsichereSiedlungen++;
-	}
+
 	
 	public Zeitscheibe getOriginalZeitscheibe() {
 		return originalZeitscheibe;
@@ -58,8 +55,8 @@ public class MyZeitscheibe extends Zeitscheibe {
 	}
 	
 	public void resetAllCounters() {
-		this.anzahlSichereSiedlungen = 0;
-		this.anzahlUnsichereSiedlungen = 0;
+		sichereSiedlungen = new HashSet<Sample>();
+		unsichereSiedlungen = new HashSet<Sample>();
 	}
 
 	

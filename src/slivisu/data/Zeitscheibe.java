@@ -44,7 +44,7 @@ public class Zeitscheibe {
 		this.ende = ende;
 	}
 	
-	public Bin<Double> getBin() {
+	public synchronized Bin<Double> getBin() {
 		return new Bin<Double>((double) anfang, (double) ende);
 	}
 	

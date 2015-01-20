@@ -23,11 +23,10 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	// Internal
 	Data data;
 	ObservationData observationData;
-	
-	List<Set<MyZeitscheibe>> allEbenenAufZeitscheibenListeInternal;
-	List<MyZeitscheibe> allZeitscheibenInternal;
-	
+	private List<Set<MyZeitscheibe>> allEbenenAufZeitscheibenListeInternal;
+	private List<MyZeitscheibe> allZeitscheibenInternal;
 	int lastAllCount = 0;
+	
 	
 	// Ausgaben
 	List<List<MyZeitscheibe>> allData;	
@@ -41,100 +40,21 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 		this.updateDataToSelectedData();
 	}
 	
-	// lazy init alle zeitscheiben
-	private List<MyZeitscheibe> getAlleZeitscheiben() {
-		// Zeitscheiven
-		if (this.allZeitscheibenInternal == null) {
-			if (observationData.getChronologie().size() != 0) {
-				this.allEbenenAufZeitscheibenListeInternal = new LinkedList<Set<MyZeitscheibe>>();
-				for (int i = 0; i < 5;i++) {
-					this.allEbenenAufZeitscheibenListeInternal.add(new HashSet<MyZeitscheibe>());
-				}
-				
-				// Alle zeitscheiben auf MyZeitscheibe ändern
-				LinkedList<MyZeitscheibe> alleZeitscheiben = new LinkedList<MyZeitscheibe>();
-				for (List<Zeitscheibe> ebene : observationData.getChronologie()) {
-						LinkedList<MyZeitscheibe> allZeitscheibenInEbene = new LinkedList<MyZeitscheibe>();
-						for(Zeitscheibe zeitscheibe : ebene) {
-								MyZeitscheibe eineZeitscheibe = new MyZeitscheibe(zeitscheibe);
-								allZeitscheibenInEbene.add(eineZeitscheibe);
-								alleZeitscheiben.add(eineZeitscheibe);
-								this.allEbenenAufZeitscheibenListeInternal.get(eineZeitscheibe.getEbene() -1).add(eineZeitscheibe);
-						}
-				}
-				
-				for (int i = 0; i < 5;i++) {
-					this.allEbenenAufZeitscheibenListeInternal.set(i, new HashSet<MyZeitscheibe>(this.sortiereZeitscheiben(this.allEbenenAufZeitscheibenListeInternal.get(i))));
-				}
-				
-				this.allZeitscheibenInternal = alleZeitscheiben;
-			}
-			
-			
-		}
-		
-		if (this.allZeitscheibenInternal != null) {
-			// alle samples den zeitscheiben zuordnen
-			if (this.lastAllCount != this.data.getAllSamples().getAll().size()) { // nur falls sich was geändert hat
-				this.lastAllCount = this.data.getAllSamples().getAll().size(); 
-				for(Sample sample : data.getAllSamples().getAll()) {
-					Map<Zeitscheibe, Double> map = observationData.getDatierung(sample);
-					for (MyZeitscheibe zeitscheibe : this.allZeitscheibenInternal) {
-						Double wert = map.get(zeitscheibe.getOriginalZeitscheibe());
-						if (wert != 0) {
-							 zeitscheibe.addSample(sample); 
-						}
-					}
-				}
-			}
-		}
-		
-		return this.allZeitscheibenInternal;
-	}
-
-	private Collection<MyZeitscheibe> sortiereZeitscheiben (Collection<MyZeitscheibe> zeitscheiben) {
-		LinkedList<Bin<Double>> bins = new LinkedList<Bin<Double>>();
-		
-		for (Zeitscheibe ebene : zeitscheiben) { // Alle relevanten zeitscheiben
-			bins.add(ebene.getBin());
-		}
-		
-		// Sortieren
-		 Set<MyZeitscheibe> ausgabe = new HashSet<MyZeitscheibe>();
-		 Map<Double, MyZeitscheibe> map = new HashMap<Double, MyZeitscheibe>();
-		 List<Double> doublesListe = new LinkedList<Double>();
-		 
-		 for (MyZeitscheibe zs : zeitscheiben) {
-			 double wert = zs.getBin().getMin();
-			 doublesListe.add(wert);
-			 map.put(wert, zs);
-		 }
-		 Collections.sort(doublesListe);
-		 
-		 
-		for (Double dbl : doublesListe) {
-			ausgabe.add(map.get(dbl));
-		}
-		return ausgabe;
-	}
-	
-	
-	
 	public void updateDataToSelectedData() {
 		// Daten aufbereiten (myzeitscheibe) + Samples den Zeitscheiben zuordnen
 		List<MyZeitscheibe> alleZeitscheiben = this.getAlleZeitscheiben();
 		
 		if (alleZeitscheiben != null) {
 			// Alle Counter zurücksetzen
-			for (MyZeitscheibe zs : this.allZeitscheibenInternal) {
+			for (MyZeitscheibe zs : alleZeitscheiben) {
 				zs.resetAllCounters();
 			}
 		
 			// Sichere/Unsichere Siedlungen berechnen
 			List<List<MyZeitscheibe>> allDataTemp = new LinkedList<List<MyZeitscheibe>>(); 
 			
-			int obersteEbene = 10000;
-			int untersteEbene = 0;
+			int obersteEbene = 5;
+			int untersteEbene = 1;
 			
 			// make ebenen
 			for (int i = 0; i < 5;i++) {
@@ -157,9 +77,9 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 						if (zeitscheibe.getEbene() > untersteEbene) untersteEbene = zeitscheibe.getEbene();
 						
 						if (wert == 1) {
-							zeitscheibe.increaseAnzahlSichereSiedlungen();
+							zeitscheibe.addSichereSiedlung(sample);;
 						} else if (wert < 1 && wert > 0) {
-							zeitscheibe.increaseAnzahlUnsichereSiedlungen();
+							zeitscheibe.addUnsichereSiedlung(sample);
 						}
 					}
 					
@@ -168,51 +88,51 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 		
 			// darüberliegende zeitebenen berechnen, falls diese nich existieren
 			if(obersteEbene != 1) {
-				System.out.println("NOT TESTED");
-				// reset zeitscheiben
-				for (int i = 1; i < obersteEbene; i++) {
-						for (MyZeitscheibe zeitscheibeInDerLeerenEbene : allEbenenAufZeitscheibenListeInternal.get(i - 1)) {
-							zeitscheibeInDerLeerenEbene.resetAllCounters();
-						}
-				}
-				// daten füllen
-				for (int i = 1; i < obersteEbene; i++) {
-					List<MyZeitscheibe> obersteZeitscheiben = allDataTemp.get(obersteEbene);
-					for (MyZeitscheibe zs : obersteZeitscheiben) {
-						for (MyZeitscheibe zeitscheibeInDerLeerenEbene : allEbenenAufZeitscheibenListeInternal.get(i - 1)) {
-							if (zeitscheibeInDerLeerenEbene.getAnfang() >= zs.getAnfang() && zeitscheibeInDerLeerenEbene.getEbene() <= zs.getEnde()) { // Liegt im Zeitintervall
-								// einsetzen
-								if (!allDataTemp.get(zeitscheibeInDerLeerenEbene.getEbene() -1).contains(zeitscheibeInDerLeerenEbene)) {
-									allDataTemp.get(i).add(zeitscheibeInDerLeerenEbene);
-								}
-								zeitscheibeInDerLeerenEbene.setAnzahlSichereSiedlungen(zeitscheibeInDerLeerenEbene.getAnzahlSichereSiedlungen() + zs.getAnzahlSichereSiedlungen());
-								zeitscheibeInDerLeerenEbene.setAnzahlUnsichereSiedlungen(zeitscheibeInDerLeerenEbene.getAnzahlUnsichereSiedlungen() + zs.getAnzahlUnsichereSiedlungen());
-							}	
-						}
-					}
-				}
+//				System.out.println("NOT TESTED");
+//				// reset zeitscheiben
+//				for (int i = 1; i < obersteEbene; i++) {
+//						for (MyZeitscheibe zeitscheibeInDerLeerenEbene : helper.allEbenenAufZeitscheibenListeInternal.get(i - 1)) {
+//							zeitscheibeInDerLeerenEbene.resetAllCounters();
+//						}
+//				}
+//				// daten füllen
+//				for (int i = 1; i < obersteEbene; i++) {
+//					List<MyZeitscheibe> obersteZeitscheiben = allDataTemp.get(obersteEbene - 1);
+//					for (MyZeitscheibe zs : obersteZeitscheiben) {
+//						for (MyZeitscheibe zeitscheibeInDerLeerenEbene : helper.allEbenenAufZeitscheibenListeInternal.get(i - 1)) {
+//							if (zeitscheibeInDerLeerenEbene.getAnfang() >= zs.getAnfang() && zeitscheibeInDerLeerenEbene.getEbene() <= zs.getEnde()) { // Liegt im Zeitintervall
+//								// einsetzen
+//								if (!allDataTemp.get(zeitscheibeInDerLeerenEbene.getEbene() -1).contains(zeitscheibeInDerLeerenEbene)) {
+//									allDataTemp.get(i).add(zeitscheibeInDerLeerenEbene);
+//								}
+//								zeitscheibeInDerLeerenEbene.setAnzahlSichereSiedlungen(zeitscheibeInDerLeerenEbene.getAnzahlSichereSiedlungen() + zs.getAnzahlSichereSiedlungen());
+//								zeitscheibeInDerLeerenEbene.setAnzahlUnsichereSiedlungen(zeitscheibeInDerLeerenEbene.getAnzahlUnsichereSiedlungen() + zs.getAnzahlUnsichereSiedlungen());
+//							}	
+//						}
+//					}
+//				}
 				
 			}
 		
 			// Sortieren
 			for (int i = 0; i < 5;i++) {
-				allDataTemp.set(i, new LinkedList<MyZeitscheibe>(this.sortiereZeitscheiben(allDataTemp.get(i))));
+				allDataTemp.set(i, new LinkedList<MyZeitscheibe>(SuperDataZeitscheibenHelper.sortiereZeitscheiben(allDataTemp.get(i))));
 			}
 		
 			this.allData = allDataTemp;
 			//this.lastFocus = this.allData;
 		
-			// DEBUG
-			//		int ebene = 0;
-			//		for (List<MyZeitscheibe> eben: allDataTemp) {
-			//			ebene++;
-			//			System.out.println("\nEbene: " + ebene + " \n");
-			//			for (MyZeitscheibe zsMyZeitscheibe : eben) {
-			//				System.out.print(" " + zsMyZeitscheibe.getAnfang() + " ");
-			//			}
-			//			
-			//		}
-		
+			 //DEBUG
+//					int ebene = 0;
+//					for (List<MyZeitscheibe> eben: allDataTemp) {
+//						ebene++;
+//						System.out.println("\nEbene: " + ebene + " \n");
+//						for (MyZeitscheibe zsMyZeitscheibe : eben) {
+//							System.out.print(" " + zsMyZeitscheibe.getAnfang() + " "  + "S" + zsMyZeitscheibe.getAlleSamplesInZeitscheibe().size());
+//						}
+//						
+//					}
+//		
 		
 		}
 	}
@@ -224,15 +144,68 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 
 	@Override
 	public void selectZeitscheiben(List<MyZeitscheibe> selectedZeitscheiben) {
-		Collection<Sample> selectedSamples = new LinkedList<Sample>();
-		for (MyZeitscheibe zeitscheibe : selectedZeitscheiben) {
-			selectedSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
+		if (selectedZeitscheiben.size() > 0) {
+			Collection<Sample> selectedSamples = new LinkedList<Sample>();
+			for (MyZeitscheibe zeitscheibe : selectedZeitscheiben) {
+				selectedSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
+				System.out.println("anz zs " + selectedZeitscheiben.size() +" s in zs " + zeitscheibe.getAlleSamplesInZeitscheibe().size() + " ausgabe s " +  selectedSamples.size());
+			}
+			if (selectedSamples.size() > 0) {  this.data.getSelectedSamples().set(selectedSamples);}
+			
+			
+			
 		}
-		this.data.getSelectedSamples().set(selectedSamples);
 		
 		//updateDataToSelectedData();
 	}
 
+	// lazy init alle zeitscheiben
+			public synchronized List<MyZeitscheibe> getAlleZeitscheiben() {
+					// Zeitscheiben
+					if (observationData.getChronologie().size() != 0 && this.allZeitscheibenInternal == null) {
+							this.allEbenenAufZeitscheibenListeInternal = new LinkedList<Set<MyZeitscheibe>>();
+							for (int i = 0; i < 5;i++) {
+								this.allEbenenAufZeitscheibenListeInternal.add(new HashSet<MyZeitscheibe>());
+							}
+							
+							// Alle zeitscheiben auf MyZeitscheibe ändern
+							LinkedList<MyZeitscheibe> alleZeitscheiben = new LinkedList<MyZeitscheibe>();
+							for (List<Zeitscheibe> ebene : observationData.getChronologie()) {
+									LinkedList<MyZeitscheibe> allZeitscheibenInEbene = new LinkedList<MyZeitscheibe>();
+									for(Zeitscheibe zeitscheibe : ebene) {
+											MyZeitscheibe eineZeitscheibe = new MyZeitscheibe(zeitscheibe);
+											allZeitscheibenInEbene.add(eineZeitscheibe);
+											alleZeitscheiben.add(eineZeitscheibe);
+											this.allEbenenAufZeitscheibenListeInternal.get(eineZeitscheibe.getEbene() -1).add(eineZeitscheibe);
+									}
+							}
+							
+							for (int i = 0; i < 5;i++) {
+								this.allEbenenAufZeitscheibenListeInternal.set(i, new HashSet<MyZeitscheibe>(SuperDataZeitscheibenHelper.sortiereZeitscheiben(this.allEbenenAufZeitscheibenListeInternal.get(i))));
+							}
+							this.allZeitscheibenInternal = alleZeitscheiben;
+						
+					}
+					
+					if (this.allZeitscheibenInternal != null) {
+						// alle samples den zeitscheiben zuordnen
+						if (this.lastAllCount != this.data.getAllSamples().getAll().size()) { // nur falls sich was geändert hat
+							this.lastAllCount = this.data.getAllSamples().getAll().size(); 
+							for(Sample sample : data.getAllSamples().getAll()) {
+								Map<Zeitscheibe, Double> map = observationData.getDatierung(sample);
+								for (MyZeitscheibe zeitscheibe : this.allZeitscheibenInternal) {
+									Double wert = map.get(zeitscheibe.getOriginalZeitscheibe());
+									if (wert != 0) {
+										 zeitscheibe.addSample(sample); 
+									}
+								}
+							}
+						}					
+					}
+					
+					return this.allZeitscheibenInternal;
+				}
+	
 	@Override
 	public void resetSelectionToLastFocus() {
 		if (this.lastFocus != null) {

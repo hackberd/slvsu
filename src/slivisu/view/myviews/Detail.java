@@ -10,14 +10,16 @@ public class Detail extends JPanel implements InteractionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	SuperDataDetail data;
 	public Detail(SuperDataDetail data) {
+		this.data = data;
 	}
 	
 	@Override
 	public void updateView() {
-		// TODO Auto-generated method stub
-
+		if (data != null) {
+			this.data.updateDataToSelectedSamples();;
+		}
 	}
 
 	@Override

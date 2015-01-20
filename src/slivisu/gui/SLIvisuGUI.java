@@ -37,6 +37,7 @@ import slivisu.mapper.SlivisuHistogramData;
 import slivisu.mapper.SlivisuObservationsTableModel;
 import slivisu.mapper.SuperDataDetailImp;
 import slivisu.mapper.SuperDataUebersichtImp;
+import slivisu.mapper.SuperDataZeitscheibenHelper;
 import slivisu.view.globe.SliGlobe;
 import slivisu.view.globe.SliGlobePopupMenu;
 import slivisu.view.histogram.HistogramController;
@@ -165,6 +166,7 @@ public class SLIvisuGUI extends JFrame {
 			viewControl.addInteractionListener(attributeTable);
 			viewPanel.put("listing", new View("Listing", null, attributeTable));
 		}
+		
 		// Uebersicht
 		Uebersicht uebersichtView = new Uebersicht(new SuperDataUebersichtImp(data));
 		// ODER EINFACHE VARIANTE: MeineVis vis = new MeineVis(data);

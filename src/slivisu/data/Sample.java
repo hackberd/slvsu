@@ -75,4 +75,6 @@ public class Sample {
 	public void setLon(double lon) {
 		this.lon = lon;
 	}
+
+	
 }

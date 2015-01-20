@@ -27,7 +27,7 @@ public class UebersichtListener extends MouseAdapter {
 			String text;
 			for (Balken bar : uebersicht.getBalken()) {
 				text = "";
-				if (bar.getRect().contains(mPoint)) {
+				if (bar != null && bar.getRect() != null && mPoint != null && bar.getRect().contains(mPoint)) {
 					// markieren des Balken
 					bar.setHit(true);
 					text = "bla";

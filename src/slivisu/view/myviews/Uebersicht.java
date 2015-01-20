@@ -105,7 +105,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			startSelection = null;
 			endSelection = null;
 			
-			System.out.println(selectedZeitscheiben.size() + " , " + balken.size());
+			//System.out.println(selectedZeitscheiben.size() + " , " + balken.size());
 			
 			data.selectZeitscheiben(selectedZeitscheiben);
 			repaint();
