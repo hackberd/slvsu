@@ -8,7 +8,7 @@ public class MyZeitscheibe extends Zeitscheibe {
 	int anzahlUnsichereSiedlungen = 0;
 	Zeitscheibe originalZeitscheibe;
 	Set<Sample> alleSamplesInZeitscheibe;
-	
+
 	
 	public MyZeitscheibe(Zeitscheibe zs) {
 		this.setAnfang(zs.getAnfang());

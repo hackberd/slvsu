@@ -34,4 +34,15 @@ public interface SuperDataUebersicht {
 	 */
 	public List<List<MyZeitscheibe>> getDataForFocusWhileFocussing();
 	
+	/***
+	 * Liste ob bestimmte ebenen angezeigt werden sollen
+	 * @return
+	 */
+	public List<Boolean> getFilter();
+	
+	/***
+	 * Settings
+	 * @param settings Liste von ebenen (0 = 1, 1 =2, usw) auf Anzeige
+	 */
+	public void setFilter(List<Boolean> settings);
 }
