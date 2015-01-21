@@ -230,7 +230,7 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 		if (this.filter == null) {
 			this.filter = new LinkedList<Boolean>();
 			this.filter.add(true); 
-			this.filter.add(true); 
+			this.filter.add(false); 
 			this.filter.add(true); 
 			this.filter.add(true); 
 			this.filter.add(true); 
