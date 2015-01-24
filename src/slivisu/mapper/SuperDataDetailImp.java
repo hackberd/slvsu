@@ -152,4 +152,9 @@ public class SuperDataDetailImp implements SuperDataDetail {
 		this.filter = settings;
 	}
 
+	@Override
+	public List<MyZeitscheibe> getAllMyZeitscheiben() {
+		return allZeitscheibenInternal;
+	}
+
 }

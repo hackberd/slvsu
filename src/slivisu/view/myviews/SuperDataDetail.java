@@ -27,6 +27,12 @@ public interface SuperDataDetail {
 	public Map<MyZeitscheibe, Boolean> zsForSampleWithSicher(Sample sample, int ebene);
 
 	/***
+	 * Alle MyZeitscheiben
+	 * @return List<MyZeitscheibe>  alle MyZeitscheiben
+	 */
+	public List<MyZeitscheibe> getAllMyZeitscheiben();
+	
+	/***
 	 * Ist ein Sample sicher in einer ZS
 	 * @param s Sample
 	 * @param zs Zeitscheibe 

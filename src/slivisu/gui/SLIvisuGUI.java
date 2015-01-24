@@ -37,12 +37,10 @@ import slivisu.mapper.SlivisuHistogramData;
 import slivisu.mapper.SlivisuObservationsTableModel;
 import slivisu.mapper.SuperDataDetailImp;
 import slivisu.mapper.SuperDataUebersichtImp;
-import slivisu.mapper.SuperDataZeitscheibenHelper;
 import slivisu.view.globe.SliGlobe;
 import slivisu.view.globe.SliGlobePopupMenu;
 import slivisu.view.histogram.HistogramController;
 import slivisu.view.myviews.Detail;
-import slivisu.view.myviews.SuperDataUebersicht;
 import slivisu.view.myviews.Uebersicht;
 import slivisu.view.table.AttributeTables;
 

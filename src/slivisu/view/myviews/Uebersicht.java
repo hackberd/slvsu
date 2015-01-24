@@ -21,10 +21,6 @@ import slivisu.data.MyZeitscheibe;
 import slivisu.data.datatype.Balken;
 import slivisu.gui.controller.InteractionListener;
 
-/**
- * @author immanuelpelzer
- *
- */
 public class Uebersicht extends JPanel implements InteractionListener {
 
 	private static final long serialVersionUID = 1L;

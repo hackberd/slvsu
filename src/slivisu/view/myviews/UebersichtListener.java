@@ -1,19 +1,10 @@
 package slivisu.view.myviews;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-
-import javax.swing.JComponent;
-
-import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
-import com.sun.tools.javac.comp.Check;
 
 import slivisu.data.datatype.Balken;
-import slivisu.defaults.chart.DefaultChart;
 
 public class UebersichtListener extends MouseAdapter {
 	

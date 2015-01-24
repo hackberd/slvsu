@@ -9,13 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import slivisu.data.Data;
 import slivisu.data.MyZeitscheibe;
-import slivisu.data.ObservationData;
-import slivisu.data.Sample;
 import slivisu.data.Zeitscheibe;
 import slivisu.data.datatype.Bin;
-import sun.tools.tree.ThisExpression;
 
 public class SuperDataZeitscheibenHelper {
 		
