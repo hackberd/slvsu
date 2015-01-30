@@ -54,9 +54,9 @@ public class SuperDataDetailImp implements SuperDataDetail {
 					Double wert = map.get(zeitscheibe.getOriginalZeitscheibe());
 					if (wert != 0) {// ist drin
 						// einsetzen
-						if (wert == 1) {
+						if (wert == 1 && showSicher()) {
 							ebenenAufZeitscheibenInEbene.get(zeitscheibe.getEbene() -1).put(zeitscheibe, true);
-						} else if (wert < 1 && wert > 0) {
+						} else if ((wert < 1 && wert > 0) && showUnSicher()) {
 							ebenenAufZeitscheibenInEbene.get(zeitscheibe.getEbene() -1).put(zeitscheibe, false);
 						}
 					} // wert != 0
@@ -135,16 +135,30 @@ public class SuperDataDetailImp implements SuperDataDetail {
 
 	@Override
 	public Map<MyZeitscheibe, Boolean> zsForSampleWithSicher(Sample sample, int ebene) {
-		return this.sampleAufListeVonEbenenMitZeitscheibenAufSicher.get(sample).get(ebene - 1);
+		if (this.sampleAufListeVonEbenenMitZeitscheibenAufSicher != null) {
+			if (this.sampleAufListeVonEbenenMitZeitscheibenAufSicher.containsKey(sample)) {
+				return this.sampleAufListeVonEbenenMitZeitscheibenAufSicher.get(sample).get(ebene - 1);
+			}
+			return null;
+		}
+		return null;
 	}
 
 	@Override
 	public List<Boolean> getFilter() {
 		if (this.filter == null) {
 			this.filter = new LinkedList<Boolean>();
-			for (int i = 0; i < 5; i++) { this.filter.add(true); }
+			for (int i = 0; i < 7; i++) { this.filter.add(true); }
 		}
 		return this.filter;
+	}
+	
+	private boolean showSicher() {
+		return this.filter.get(5);
+	}
+	
+	private boolean showUnSicher() {
+		return this.filter.get(6);
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class DetailListener extends MouseAdapter {
 	private void checkIfHit(MouseEvent e) {
 		if (detail.getBalken() != null) {
 			Point mPoint = e.getPoint();
-			String text;
+			//String text;
 			boolean hit = false;
 			
 			String tooltip = "<html>";
@@ -28,7 +28,7 @@ public class DetailListener extends MouseAdapter {
 			for (List<Balken> listOfBars : detail.getBalken().values()) {
 				for (Balken bar : listOfBars) {
 					if (bar != null) {
-						text = "";
+						//text = "";
 						if (bar != null && bar.getRect() != null && mPoint != null && bar.getRect().contains(mPoint)) {
 							// markieren des Balken
 							bar.setHit(true);

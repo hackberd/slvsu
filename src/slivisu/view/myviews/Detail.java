@@ -29,6 +29,8 @@ public class Detail extends JPanel implements InteractionListener{
 	private JCheckBox filter3;
 	private JCheckBox filter4;
 	private JCheckBox filter5;
+	private JCheckBox filter6;
+	private JCheckBox filter7;
 	
 	public Detail(SuperDataDetail data) {
 		this.data	= data;
@@ -42,6 +44,8 @@ public class Detail extends JPanel implements InteractionListener{
 		filter3			= new JCheckBox("Level 3", true);
 		filter4			= new JCheckBox("Level 4", true);
 		filter5			= new JCheckBox("Level 5", true);
+		filter6			= new JCheckBox("Sicher", true);
+		filter7			= new JCheckBox("Unsicher", true);
 		
 		itemListener	= new DetailItemListener(this);
 		
@@ -50,6 +54,8 @@ public class Detail extends JPanel implements InteractionListener{
 		filter3.addItemListener(itemListener);
 		filter4.addItemListener(itemListener);
 		filter5.addItemListener(itemListener);
+		filter6.addItemListener(itemListener);
+		filter7.addItemListener(itemListener);
 		
 		// TODO: adden
 		add(scrollPane);
@@ -58,6 +64,8 @@ public class Detail extends JPanel implements InteractionListener{
 		add(filter3);
 		add(filter4);
 		add(filter5);
+		add(filter6);
+		add(filter7);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		layout.putConstraint(SpringLayout.WEST,		scrollPane,	5,		SpringLayout.WEST,	this);
@@ -90,6 +98,18 @@ public class Detail extends JPanel implements InteractionListener{
 		layout.putConstraint(SpringLayout.EAST,		filter5,	75,	SpringLayout.WEST,	filter5);
 		layout.putConstraint(SpringLayout.SOUTH,	filter5,	-5,	SpringLayout.SOUTH,	this);
 		
+		
+		layout.putConstraint(SpringLayout.WEST,		filter6,	5,	SpringLayout.EAST,	filter5);
+		layout.putConstraint(SpringLayout.NORTH,	filter6,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		filter6,	75,	SpringLayout.WEST,	filter6);
+		layout.putConstraint(SpringLayout.SOUTH,	filter6,	-5,	SpringLayout.SOUTH,	this);
+		
+		
+		layout.putConstraint(SpringLayout.WEST,		filter7,	5,	SpringLayout.EAST,	filter6);
+		layout.putConstraint(SpringLayout.NORTH,	filter7,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		filter7,	100,SpringLayout.WEST,	filter7);
+		layout.putConstraint(SpringLayout.SOUTH,	filter7,	-5,	SpringLayout.SOUTH,	this);
+		
 		this.setLayout(layout);
 		
 		setFilter();
@@ -113,6 +133,8 @@ public class Detail extends JPanel implements InteractionListener{
 		settings.add(filter3.isSelected());
 		settings.add(filter4.isSelected());
 		settings.add(filter5.isSelected());
+		settings.add(filter6.isSelected());
+		settings.add(filter7.isSelected());
 		
 		detail.setFilter(settings);
 	}
