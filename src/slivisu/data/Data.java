@@ -1,6 +1,8 @@
 package slivisu.data;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import slivisu.data.datatype.Bin;
@@ -9,6 +11,8 @@ import slivisu.data.selection.SelectionListener;
 import slivisu.gui.controller.DataInterface;
 import slivisu.gui.controller.InteractionController;
 import slivisu.gui.globalcontrols.timescale.TimeScaleData;
+import sun.security.timestamp.TSRequest;
+import sun.security.x509.NetscapeCertTypeExtension;
 
 /**
  * das Haupt-Datenobjekt in Slivisu mit allen global verf�gbaren Datenstrukturen und Selektionen 
@@ -18,7 +22,7 @@ import slivisu.gui.globalcontrols.timescale.TimeScaleData;
  */
 public class Data implements DataInterface, SelectionListener<Sample>{
 
-	private InteractionController controller;
+	public InteractionController controller;
 	
 	private ObservationData observations;
 	
@@ -28,6 +32,8 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 	private Selection<Sample> selectedSamples;
 	private Selection<Sample> markedSamples;
 
+	private Map<Zeitscheibe, Wegenetz> wegenetz;
+	
 	private TimeRange timeRange;
 	
 	// ################################# Getter und Setter #################################
@@ -40,7 +46,8 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 		this.allSamples = new Selection<Sample>();
 		this.selectedSamples = new Selection<Sample>();
 		this.markedSamples = new Selection<Sample>();
-
+		this.wegenetz = new HashMap<Zeitscheibe, Wegenetz>();
+		
 		this.allSamples.setController(controller);
 		this.selectedSamples.setController(controller);
 		this.markedSamples.setController(controller);
@@ -126,4 +133,23 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 	public ObservationTableData getObservationTableData() {
 		return observationsTD;
 	}
+
+	public Map<Zeitscheibe, Wegenetz> getWegenetz() {
+		return wegenetz;
+	}
+
+	public void addWegenetz(Map<Zeitscheibe, Wegenetz> wegenetz) {
+		this.wegenetz.putAll(wegenetz);
+//		for (Zeitscheibe zs : wegenetz.keySet()) {
+//			System.out.println("ZS: " + zs.getKurzform());
+//			Wegenetz netz = wegenetz.get(zs);
+//			
+//			for (int i = 0; i < netz.size(); i++) {
+//				
+//				System.out.println("lat " + netz.getLatOf(i) + " long " + netz.getLongOf(i));
+//			}
+//		}
+	}
+	
+	
 }
