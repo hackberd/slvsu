@@ -120,7 +120,7 @@ public class ObservationData {
 				}
 			}
 		}
-		System.out.println("getTimeRange(Collection<Sample> selection) Zeitinformationen, Min:" + minimum + " Max: " + maximum);
+		//System.out.println("getTimeRange(Collection<Sample> selection) Zeitinformationen, Min:" + minimum + " Max: " + maximum);
 		return new Bin<Integer>(minimum, maximum);
 	}
 	
@@ -149,7 +149,7 @@ public class ObservationData {
 				}
 			}
 		}
-		System.out.println("getTimeRange(Collection<Sample> selection, int ebene) Zeitinformationen, Min:" + minimum + " Max: " + maximum);
+		//System.out.println("getTimeRange(Collection<Sample> selection, int ebene) Zeitinformationen, Min:" + minimum + " Max: " + maximum);
 		return new Bin<Integer>(minimum, maximum);
 	}
 	

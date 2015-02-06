@@ -101,13 +101,13 @@ public class DetailPanel extends JPanel {
 			
 			for (Sample sample : data.getAllSelectedSamples()) {
 				balken	= new LinkedList<Balken>();
-				ebenenShowForSample.put(sample, new LinkedList<List<Boolean>>());
+				LinkedList<List<Boolean>> linkedList =  new LinkedList<List<Boolean>>();
 				for (int i = 1; i <= 5; i++) {
-					ebenenShowForSample.get(sample).add(new LinkedList<Boolean>());
-					ebenenShowForSample.get(sample).get(i -1).add(false);
-					ebenenShowForSample.get(sample).get(i -1).add(false);
+					LinkedList<Boolean> toAdd = new LinkedList<Boolean>();
+					toAdd.add(false); toAdd.add(false);
+					linkedList.add(toAdd);
 				}
-				
+				ebenenShowForSample.put(sample,linkedList);
 				
 				for (int cntEbene = 1; cntEbene < 6; cntEbene++) {
 					map = data.zsForSampleWithSicher(sample, cntEbene);
@@ -115,13 +115,14 @@ public class DetailPanel extends JPanel {
 					
 					
 					for (MyZeitscheibe myZeitscheibe : allZeitscheiben) {
-						if (map.get(myZeitscheibe) != null) {
+						if (map != null && map.containsKey(myZeitscheibe) && map.get(myZeitscheibe) != null) {
 							
 							
 							sicher		= 0;
 							unsicher	= 0;
 							
-							if (!ebenenShowForSample.containsKey(sample)) return;
+							if (ebenenShowForSample != null && !ebenenShowForSample.containsKey(sample)) return;
+							if (ebenenShowForSample.get(sample).size() < cntEbene && ebenenShowForSample.get(sample).get(cntEbene-1) != null) return;
 							if (map.get(myZeitscheibe) ) {
 								ebenenShowForSample.get(sample).get(cntEbene-1).set(0, true);
 								sicher++;
@@ -152,7 +153,7 @@ public class DetailPanel extends JPanel {
 				balkenForSample.put(sample, balken);
 			}
 			rangeTime	= max - min;
-			System.out.println("range:" + rangeTime);
+			//System.out.println("range:" + rangeTime);
 		}
 	}
 	
@@ -221,7 +222,8 @@ public class DetailPanel extends JPanel {
 						
 						// unsicher / sicher -> Offset
 						yMin	= PADDING + lastBarY;
-						if (!mapSicherheit.get(bar.getRelZeitscheibe())) {
+						if (mapSicherheit != null && mapSicherheit.containsKey(bar.getRelZeitscheibe()) &&
+							!mapSicherheit.get(bar.getRelZeitscheibe())) {
 							if (filter.get(curLevel - 1)) {
 								yMin += HEIGHTVISIBLE;
 							} else {

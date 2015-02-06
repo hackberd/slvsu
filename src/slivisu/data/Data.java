@@ -139,7 +139,7 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 	}
 
 	public void addWegenetz(Map<Zeitscheibe, Wegenetz> wegenetz) {
-		this.wegenetz.putAll(wegenetz);
+		if (wegenetz != null) this.wegenetz.putAll(wegenetz);
 //		for (Zeitscheibe zs : wegenetz.keySet()) {
 //			System.out.println("ZS: " + zs.getKurzform());
 //			Wegenetz netz = wegenetz.get(zs);
@@ -149,6 +149,10 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 //				System.out.println("lat " + netz.getLatOf(i) + " long " + netz.getLongOf(i));
 //			}
 //		}
+	}
+
+	public void setMarkedSamples(Selection<Sample> markedSamples) {
+		this.markedSamples = markedSamples;
 	}
 	
 	

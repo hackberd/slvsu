@@ -152,6 +152,7 @@ public class SLIvisuGUI extends JFrame {
 		SlivisuGlobeData globeData = new SlivisuGlobeData(data,animationData);
 		SliGlobe globe = new SliGlobe(globeData);
 		animationData.setGlobe(globe);
+		animationData.setGlobeData(globeData);
 		globe.setPopupMenu(new SliGlobePopupMenu(globe));
 		viewPanel.put("globe", new View("Geographic distribution (Globe)", null, globe));		
 		viewControl.addInteractionListener(globe);
@@ -184,7 +185,7 @@ public class SLIvisuGUI extends JFrame {
 		
 		
 		AnimationView animationView = new AnimationView(animationData);
-		viewPanel.put("AnimationView",new View("Verlauf Straßensystem", null, animationView));
+		viewPanel.put("AnimationView",new View("Animation", null, animationView));
 		viewControl.addInteractionListener(animationView.getListener());
 		
 		// End adding
@@ -200,7 +201,7 @@ public class SLIvisuGUI extends JFrame {
 		
 		DockingWindow animationView = viewPanel.get("AnimationView");
 		
-		globe = new SplitWindow(false, 0.2f, animationView, globe);
+		globe = new SplitWindow(false, 0.35f, animationView, globe);
 		
 		histogramm = new SplitWindow(false, 0.15f, histogramm, globe);
 		

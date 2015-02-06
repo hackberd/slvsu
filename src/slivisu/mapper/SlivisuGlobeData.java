@@ -7,6 +7,7 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Path;
 import gov.nasa.worldwind.render.Polyline;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +33,8 @@ public class SlivisuGlobeData implements GlobeData {
 	RenderableLayer layerMarked;
 	RenderableLayer layerWegnetz;
 	
+	List<RenderableLayer> renderList;
+	
 	/**
 	 * @param data Datenobjekt
 	 */
@@ -49,6 +52,7 @@ public class SlivisuGlobeData implements GlobeData {
 		layerMarked.setName("Marked Samples");
 		layerWegnetz = new RenderableLayer();
 		layerWegnetz.setName("Wegnetz");
+		layerWegnetz.setMaxActiveAltitude(10000); // Erst anzeigen ab dieser Höhe, sonst unbenutzbar
 		GlobePoint globePoint = null;
 		
 		this.selectedSamples = data.getSelectedSamples();
@@ -58,15 +62,16 @@ public class SlivisuGlobeData implements GlobeData {
 		//if (this.wegnetz != null) System.out.println("WEGNETZ" + this.wegnetz.size());
 		//if (this.wegnetz != null) {
 		if (this.data.getWegenetz().size() != 0) {
-			for (int i = 0; i < 5;i++) { // TODO: was soll mit den happen passieren? viel zu groß!!
+			for (int i = 0; i < this.wegnetz.size();i++) { // TODO: was soll mit den happen passieren? viel zu groß!!
 				List<List<Point2D.Double>> einHappen = this.wegnetz.get(i);
 				for (List<Point2D.Double> einzelneLinie : einHappen) {
 					LinkedList<Position> positions = new LinkedList<Position>();
 					for (Point2D.Double p : einzelneLinie) {
-						positions.add(Position.fromDegrees(p.getY(), p.getX(), 1e4));
+						positions.add(Position.fromDegrees(p.getY(), p.getX(), 1000));
 					}
 					
 					Polyline path = new Polyline(positions);
+				
 					//path.setShowPositions(true);
 					//System.out.println(pos1.getLongitude() +" " +  pos1.getLatitude());
 					//path.setPathType( AVKey.RHUMB_LINE);
@@ -85,17 +90,31 @@ public class SlivisuGlobeData implements GlobeData {
 		
 		for (Sample sample : this.markedSamples.getAll()) {
 			globePoint = new GlobePoint(Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4), sample);
+			globePoint.setColor(Color.YELLOW);
 			layerMarked.addRenderable(globePoint);
 		}
 		
 		return true;
 	}
 
+	public void replaceMarkedWithSamples(Collection<Sample> samples) {
+		layerMarked = new RenderableLayer();
+		layerMarked.setName("Moving Samples");
+		for (Sample sample : samples) {
+			GlobePoint globePoint = new GlobePoint(Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4), sample);
+			globePoint.setColor(Color.YELLOW);
+			layerMarked.addRenderable(globePoint);
+		}
+	}
+	
 	@Override
 	public List<RenderableLayer> getLayers() {
-		List<RenderableLayer> renderList = new ArrayList<RenderableLayer>();
+		renderList = new ArrayList<RenderableLayer>();
 		renderList.add(layerSelected);
 		renderList.add(layerMarked);
+		
+		//layerWegnetz.setEnabled(false);
+		
 		renderList.add(layerWegnetz);
 		return renderList;
 	}
