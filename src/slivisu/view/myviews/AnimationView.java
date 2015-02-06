@@ -30,7 +30,7 @@ public class AnimationView extends JPanel implements Animation  {
 	private Animator animator;
 	private SuperDataAnimationImpl data;
 	public void updateView() {
-		
+		this.data.updateData();
 	}
 	public InteractionListener getListener() {
 		return this.listener;

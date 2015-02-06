@@ -71,10 +71,8 @@ public class UebersichtListener extends MouseAdapter {
 				if (bar != null && bar.getRect() != null && bar.getRect().contains(e.getPoint())) {
 					bar.setSelected(true);
 					break;
-				}
-				
-			}	
-			
+				}		
+			}		
 		}
 	}
 	

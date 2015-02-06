@@ -121,6 +121,7 @@ public class DetailPanel extends JPanel {
 							sicher		= 0;
 							unsicher	= 0;
 							
+							if (!ebenenShowForSample.containsKey(sample)) return;
 							if (map.get(myZeitscheibe) ) {
 								ebenenShowForSample.get(sample).get(cntEbene-1).set(0, true);
 								sicher++;

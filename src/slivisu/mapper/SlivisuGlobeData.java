@@ -5,6 +5,7 @@ import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Path;
+import gov.nasa.worldwind.render.Polyline;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class SlivisuGlobeData implements GlobeData {
 	private SuperDataAnimationImpl animationData;
 	private Selection<Sample> selectedSamples;
 	private Selection<Sample> markedSamples;
-	private Vector<List<Point2D.Double>> wegnetz;
+	private List<Vector<List<Point2D.Double>>> wegnetz;
 	
 	RenderableLayer layerSelected;
 	RenderableLayer layerMarked;
@@ -56,20 +57,24 @@ public class SlivisuGlobeData implements GlobeData {
 		
 		//if (this.wegnetz != null) System.out.println("WEGNETZ" + this.wegnetz.size());
 		//if (this.wegnetz != null) {
-			for (List<Point2D.Double> einzelneLinie : this.wegnetz) {
-				LinkedList<Position> positions = new LinkedList<Position>();
-				for (Point2D.Double p : einzelneLinie) {
-					positions.add(Position.fromDegrees(p.getX(), p.getY(), 1e4));
+		if (this.data.getWegenetz().size() != 0) {
+			for (int i = 0; i < 5;i++) { // TODO: was soll mit den happen passieren? viel zu groß!!
+				List<List<Point2D.Double>> einHappen = this.wegnetz.get(i);
+				for (List<Point2D.Double> einzelneLinie : einHappen) {
+					LinkedList<Position> positions = new LinkedList<Position>();
+					for (Point2D.Double p : einzelneLinie) {
+						positions.add(Position.fromDegrees(p.getY(), p.getX(), 1e4));
+					}
+					
+					Polyline path = new Polyline(positions);
+					//path.setShowPositions(true);
+					//System.out.println(pos1.getLongitude() +" " +  pos1.getLatitude());
+					//path.setPathType( AVKey.RHUMB_LINE);
+					//path.setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
+					layerWegnetz.addRenderable(path);
 				}
-				
-				Path path = new Path(positions);
-				
-				//System.out.println(pos1.getLongitude() +" " +  pos1.getLatitude());
-				//path.setPathType( AVKey.RHUMB_LINE);
-				//path.setAltitudeMode(WorldWind.RELATIVE_TO_GROUND);
-				layerWegnetz.addRenderable(path);
 			}
-		//}
+		}
 		
 		
 		for (Sample sample : this.selectedSamples.getAll()) {
@@ -92,7 +97,6 @@ public class SlivisuGlobeData implements GlobeData {
 		renderList.add(layerSelected);
 		renderList.add(layerMarked);
 		renderList.add(layerWegnetz);
-		
 		return renderList;
 	}
 
