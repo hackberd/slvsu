@@ -2,10 +2,13 @@ package slivisu.view.myviews;
 
 
 
-import java.awt.BorderLayout;
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,12 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SpringLayout;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
-
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.Sample;
-import slivisu.data.Zeitscheibe;
-import slivisu.data.selection.Selection;
 import slivisu.gui.controller.InteractionListener;
 import slivisu.mapper.SuperDataAnimationImpl;
 import animation.Animation;
@@ -53,9 +52,12 @@ public class AnimationView extends JPanel implements Animation  {
 	private AnimationActionListener actionListener;
 	private AnimationsChangeListener changeListener;
 	
+	private List<MyZeitscheibe> aktuelleEbene;
+	
 	public void updateView() {
 		this.data.updateData();
 		//updateZS();
+		this.data.updateWegnetzData();
 	}
 	public InteractionListener getListener() {
 		return this.listener;
@@ -168,7 +170,67 @@ public class AnimationView extends JPanel implements Animation  {
 //		add(controlPanel, BorderLayout.CENTER);
 		setLayout(layout);
 	}
-	private List<MyZeitscheibe> aktuelleEbene;
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		paintDetail(g);
+	}
+	
+	public void paintDetail(Graphics g) {
+		if ((data != null) && (aktuelleEbene != null)) {
+			Graphics2D g2d = (Graphics2D) g;
+			
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+			
+			final int PADDING	= 5;
+			
+			int xMin;
+			int xMax;
+			int yMin2		= 150;
+			int yMin		= 175;
+			int yMax		= 200;
+			int min			= slider.getMinimum();
+			int max			= slider.getMaximum();
+			int rangeTime	= max- min;
+			
+			for (MyZeitscheibe zs : aktuelleEbene) {
+				xMin	= (int)	(				 + PADDING + ( (double) (zs.getAnfang() - min) / (double) rangeTime) * (this.getWidth() - 2*PADDING));
+				xMax	= (int)	(this.getWidth() - PADDING - ( (double) (max - zs.getEnde()) / (double) rangeTime)   * (this.getWidth() - 2*PADDING));
+				
+				Rectangle2D rect;
+				rect = new Rectangle(	xMin,
+						yMin,
+						(xMax - xMin),
+						(yMax - yMin));
+				
+				g2d.setColor(Color.CYAN);
+				g2d.fill(rect);
+				
+				g2d.setColor(Color.BLACK);
+				g2d.draw(rect);
+			}
+			
+			xMin	= (int)	(				 + PADDING + ( (double) (aktuelleEbene.get(currentZsIndex).getAnfang() - min) / (double) rangeTime) * (this.getWidth() - 2*PADDING));
+			xMax	= (int)	(this.getWidth() - PADDING - ( (double) (max - aktuelleEbene.get(currentZsIndex).getEnde()) / (double) rangeTime)   * (this.getWidth() - 2*PADDING));
+			
+			Rectangle2D rect;
+			rect = new Rectangle(	xMin,
+					yMin2,
+					(xMax - xMin),
+					(yMin - yMin2 - PADDING));
+			
+			String name = aktuelleEbene.get(currentZsIndex).getName();
+			
+			g2d.setColor(Color.CYAN);
+			g2d.fill(rect);
+			
+			g2d.setColor(Color.BLACK);
+			g2d.drawString(name, xMin + PADDING, yMin - PADDING);
+			g2d.draw(rect);
+		}
+	}
+	
 	public void updateZS() {
 		int setting = this.actionListener.getSetting() ;
 		if (setting != 0 && this.data.getDataForEbene(setting) != null) {
@@ -201,9 +263,10 @@ public class AnimationView extends JPanel implements Animation  {
 		if (this.aktuelleEbene != null) {
 			Set<Sample> markSamples = new HashSet<Sample>();
 			for (MyZeitscheibe zeitscheibe : this.aktuelleEbene) {
-					if (zeitscheibe.getAnfang() <= year && zeitscheibe.getEnde() >= year) { 
-						markSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
-					};
+				if (zeitscheibe.getAnfang() <= year && zeitscheibe.getEnde() >= year) { 
+					markSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
+					data.setYear(year);
+				};
 			}	
 			this.data.data.getMarkedSamples().set(markSamples);
 		}
@@ -213,6 +276,7 @@ public class AnimationView extends JPanel implements Animation  {
 	@Override
 	public void next() {
 		if (this.aktuelleEbene != null) {
+			repaint();
 			
 			if (this.aktuelleEbene.size() > currentZsIndex) {
 				slider.setValue(this.aktuelleEbene.get(currentZsIndex).getAnfang());

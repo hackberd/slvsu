@@ -17,6 +17,8 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
+import com.sun.org.apache.xpath.internal.operations.Div;
+
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.datatype.Balken;
 import slivisu.gui.controller.InteractionListener;
@@ -196,32 +198,127 @@ public class Uebersicht extends JPanel implements InteractionListener {
 					int sicher		= bar.getSicher();
 					int unsicher	= bar.getUnsicher();
 					
-					xSplit	= (int) (xMin + (xMax - xMin) * ((double) sicher/ (double) (sicher + unsicher)));
-					g2d.setColor(Color.RED);
-					g2d.fillRect(	xMin,
-							ySplit,
-							(xSplit - xMin),
-							(yMax - ySplit));
-					g2d.setColor(Color.BLACK);
-					g2d.drawRect(	xMin,
-								ySplit,
-								(xSplit - xMin),
-								(yMax - ySplit));
-					g2d.setColor(Color.WHITE);
-					g2d.drawString(String.valueOf(sicher), xMin, yMax);
+					int y1	= 0;
+					int y2	= 0;
+					int y3	= 0;
 					
-					g2d.setColor(Color.MAGENTA);
-					g2d.fillRect(	xSplit,
-							ySplit,
-							(xMax - xSplit),
-							(yMax - ySplit));
-					g2d.setColor(Color.BLACK);
-					g2d.drawRect(	xSplit,
-								ySplit,
-								(xMax - xSplit),
-								(yMax - ySplit));
-					g2d.setColor(Color.WHITE);
-					g2d.drawString(String.valueOf(unsicher), xSplit, yMax);
+					int squares = sicher + unsicher;
+					
+					// set y
+					if (squares == 1) {
+						y1	= yMax;
+					} else if (squares == 2){
+						y1	= ySplit + (int) ((yMax - ySplit) / 2);
+						y2	= yMax;
+					} else if (squares == 3) {
+						y1	= ySplit + (int) ((yMax - ySplit) / 3);
+						y2	= ySplit + (int) (2 * (yMax - ySplit) / 3);
+						y3	= yMax;
+					} else {
+						y1	= ySplit + (int) ((yMax - ySplit) / 4);
+						y2	= ySplit + (int) (2 * (yMax - ySplit) / 4);
+						y3	= ySplit + (int) (3 * (yMax - ySplit) / 4);
+					}
+					
+					// set x
+					int cols;
+					if ((squares % 4) == 0) {
+						cols = squares / 4;
+					} else {
+						cols = (int) (squares / 4) + 1;
+					}
+					int xColWidth = (int) ((xMax - xMin) / cols);
+					
+					// zeichne
+					int xsq		= xMin - xColWidth;
+					int xsq2	= xMin;
+					int ysq		= 0;
+					int ysq2	= 0;
+					
+					for (int i = 0; i < sicher; i++) {
+						if ((i % 4) == 0) {
+							xsq = xsq + xColWidth;
+							xsq2 = xsq2 + xColWidth;
+							ysq = ySplit;
+							ysq2 = y1;
+						} else if ((i % 4) == 1) {
+							ysq = y1;
+							ysq2 = y2;
+						} else if ((i % 4) == 2) {
+							ysq = y2;
+							ysq2 = y3;
+						} else { // == 3
+							ysq = y3;
+							ysq2 = yMax;
+						}
+						
+						g2d.setColor(Color.RED);
+						g2d.fillRect(	xsq,
+								ysq,
+								(xsq2 - xsq),
+								(ysq2 - ysq));
+						g2d.setColor(Color.BLACK);
+						g2d.drawRect(	xsq,
+								ysq,
+								(xsq2 - xsq),
+								(ysq2 - ysq));
+					}
+					
+					for (int i = sicher; i < unsicher + sicher; i++) {
+						if ((i % 4) == 0) {
+							xsq = xsq + xColWidth;
+							xsq2 = xsq2 + xColWidth;
+							ysq = ySplit;
+							ysq2 = y1;
+						} else if ((i % 4) == 1) {
+							ysq = y1;
+							ysq2 = y2;
+						} else if ((i % 4) == 2) {
+							ysq = y2;
+							ysq2 = y3;
+						} else { // == 3
+							ysq = y3;
+							ysq2 = yMax;
+						}
+						
+						g2d.setColor(Color.MAGENTA);
+						g2d.fillRect(	xsq,
+								ysq,
+								(xsq2 - xsq),
+								(ysq2 - ysq));
+						g2d.setColor(Color.BLACK);
+						g2d.drawRect(	xsq,
+								ysq,
+								(xsq2 - xsq),
+								(ysq2 - ysq));
+					}
+					
+//					xSplit	= (int) (xMin + (xMax - xMin) * ((double) sicher/ (double) (sicher + unsicher)));
+//					g2d.setColor(Color.RED);
+//					g2d.fillRect(	xMin,
+//							ySplit,
+//							(xSplit - xMin),
+//							(yMax - ySplit));
+//					g2d.setColor(Color.BLACK);
+//					g2d.drawRect(	xMin,
+//								ySplit,
+//								(xSplit - xMin),
+//								(yMax - ySplit));
+//					g2d.setColor(Color.WHITE);
+//					g2d.drawString(String.valueOf(sicher), xMin, yMax);
+//					
+//					g2d.setColor(Color.MAGENTA);
+//					g2d.fillRect(	xSplit,
+//							ySplit,
+//							(xMax - xSplit),
+//							(yMax - ySplit));
+//					g2d.setColor(Color.BLACK);
+//					g2d.drawRect(	xSplit,
+//								ySplit,
+//								(xMax - xSplit),
+//								(yMax - ySplit));
+//					g2d.setColor(Color.WHITE);
+//					g2d.drawString(String.valueOf(unsicher), xSplit, yMax);
 				}
 				
 				for (Balken hit : hitted) {
