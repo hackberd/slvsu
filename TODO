@@ -1,0 +1,34 @@
+186 / 255 (120 %) = 70 Punkte fehlen
+
+Ü4: 15 // Übersicht
+
+- Auf Einzelne Ebene einschränken 
+DONE - Zeitachse an Selection anpassen
+DONE - Globale Farbcodierung?
+- Aktuell Ausgewähle ZS markieren
+
+Ü5: 20 // Detail 
+- Selektion einzelner Siedlungen
+- Anpassung der Zeitachse an Selektion
+- Sortieren
+- Region auswählen
+- Mouseover -> Anzeige in Übersicht
+
+Ü6: 20 // Karte
+- Codierung Ebene
+DONE - Codierung Sicher/unsicher 
+DONE - Codierung global!
+- Tooltips
+
+// Animation
+- Steuerungsfunktionalität (Geschwindigkeit, usw)
+DONE - Aktulisierung der Fundauswahl
+- Anzeige aktueller Zeitschritt in: Zeitleiste, Histogramm DONE,  Detaildarstellung DONE, Übersicht DONE
+
+// Wegnetz anzeigen 
+- button/knopf/irgendwas zum ein uns ausschalten am besten im overlay view auf zeitscheiben, die ein Weegnetz haben
+
+DONE - ZS-> Aktuell betrachtete Zeitscheibe  anzeigen
+DONE - Fix animattion overlay bug
+
+55 Punkte möglich
