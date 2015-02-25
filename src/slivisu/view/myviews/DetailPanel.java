@@ -17,11 +17,10 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
-//import com.sun.javafx.geom.Dimension2D;
-
-import slivisu.data.MyZeitscheibe;
 import slivisu.data.Sample;
 import slivisu.data.datatype.Balken;
+//import com.sun.javafx.geom.Dimension2D;
+import slivisu.data.MyZeitscheibe;
 
 public class DetailPanel extends JPanel {
 
@@ -252,6 +251,7 @@ public class DetailPanel extends JPanel {
 						}
 						
 						// Farbe sicher oder unsicher?
+						if (!mapSicherheit.containsKey(bar.getRelZeitscheibe())) return;
 						if (mapSicherheit.get(bar.getRelZeitscheibe())) {
 							g2d.setColor(Color.GREEN);
 						} else {
@@ -298,6 +298,7 @@ public class DetailPanel extends JPanel {
 					// Linien zwischen ebenen
 					int height = lastDetailY + PADDING;
 					g2d.setColor(Color.GRAY);
+					if (!ebenenShowForSample.containsKey(sample) || ebenenShowForSample.get(sample).size() == 0)  return;
 					for (int ebene = 1; ebene < 5;ebene++) {
 						if (ebenenShowForSample.get(sample).get(ebene -1).get(0) || ebenenShowForSample.get(sample).get(ebene -1).get(1)) {
 							//System.out.println(ebenenShowForSample.get(sample));						

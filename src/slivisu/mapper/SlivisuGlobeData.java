@@ -4,6 +4,7 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.Path;
 import gov.nasa.worldwind.render.Polyline;
 
@@ -16,7 +17,9 @@ import java.util.List;
 import java.util.Vector;
 
 import slivisu.data.Data;
+import slivisu.data.MyZeitscheibe;
 import slivisu.data.Sample;
+import slivisu.data.Zeitscheibe;
 import slivisu.data.selection.Selection;
 import slivisu.view.globe.GlobeData;
 import slivisu.view.globe.GlobePoint;
@@ -61,6 +64,7 @@ public class SlivisuGlobeData implements GlobeData {
 		
 		//if (this.wegnetz != null) System.out.println("WEGNETZ" + this.wegnetz.size());
 		//if (this.wegnetz != null) {
+		// Wegnetz
 		if (this.data.getWegenetz().size() != 0) {
 			for (int i = 0; i < this.wegnetz.size();i++) { // TODO: was soll mit den happen passieren? viel zu groß!!
 				List<List<Point2D.Double>> einHappen = this.wegnetz.get(i);
@@ -81,18 +85,49 @@ public class SlivisuGlobeData implements GlobeData {
 			}
 		}
 		
+		// Selected
 		
 		for (Sample sample : this.selectedSamples.getAll()) {
 			globePoint = new GlobePoint(Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4), sample);
+			//globePoint.getAttributes().setLineWidth(3.0);
+			globePoint.setValue(AVKey.DISPLAY_NAME, sample.getGemeinde());
+			//globePoint.getAttributes().setLineMaterial(new Material(Color.green));
+			// set color
+						if (this.data.getCurrentZeitscheibe() != null) {
+							
+							List<MyZeitscheibe> zsLinkedList = this.data.getCurrentZeitscheibe();
+							
+							for (MyZeitscheibe zs : zsLinkedList) {
+									double wert = this.data.getObservationData().getDatierung(sample).get(zs.getOriginalZeitscheibe());
+									if (wert == 1) {
+										globePoint.setColor(SlivisuColors.sicher());
+									} else {
+										globePoint.setColor(SlivisuColors.unsicher());
+									}
+							}
+						} else {
+							globePoint.setColor(Color.white);
+						}
+	
+						if (this.markedSamples.getAll().contains(sample)) {
+							globePoint.setColor(Color.yellow);
+							layerMarked.addRenderable(globePoint);
+						}
+						
 			//System.out.println("p" + Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4));
 			layerSelected.addRenderable(globePoint);
 		}
 		
-		for (Sample sample : this.markedSamples.getAll()) {
-			globePoint = new GlobePoint(Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4), sample);
-			globePoint.setColor(Color.YELLOW);
-			layerMarked.addRenderable(globePoint);
-		}
+		// Marked
+//		for (Sample sample : this.markedSamples.getAll()) {
+//			globePoint = new GlobePoint(Position.fromDegrees(sample.getLon(), sample.getLat(), 1e4), sample);
+//			
+//			
+//			globePoint.setColor(Color.yellow);
+//			
+//			
+//			layerMarked.addRenderable(globePoint);
+//		}
 		
 		return true;
 	}

@@ -1,5 +1,7 @@
 package slivisu.data;
 
+import java.util.List;
+
 import slivisu.data.datatype.NumberRange;
 import slivisu.gui.globalcontrols.timescale.TimeScaleData;
 
@@ -16,6 +18,8 @@ public class TimeRange extends NumberRange<Integer> implements TimeScaleData {
 
 	}
 
+	
+	
 	@Override
 	public void update() {
 		data.updateSelections();
@@ -29,5 +33,12 @@ public class TimeRange extends NumberRange<Integer> implements TimeScaleData {
 	@Override
 	public boolean isFreezeRange() {
 		return freezeRange;
+	}
+
+
+
+	@Override
+	public List<MyZeitscheibe> selectedZeitscheibene() {
+		return this.data.getCurrentZeitscheibe();
 	}
 }

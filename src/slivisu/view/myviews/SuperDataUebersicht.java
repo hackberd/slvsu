@@ -2,6 +2,7 @@ package slivisu.view.myviews;
 
 import java.util.List;
 
+import slivisu.data.Data;
 import slivisu.data.MyZeitscheibe;
 
 public interface SuperDataUebersicht {
@@ -45,4 +46,6 @@ public interface SuperDataUebersicht {
 	 * @param settings Liste von ebenen (0 = 1, 1 =2, usw) auf Anzeige
 	 */
 	public void setFilter(List<Boolean> settings);
+	
+    public Data getData();
 }

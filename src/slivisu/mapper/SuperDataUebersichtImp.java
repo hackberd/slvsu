@@ -242,6 +242,12 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	public void setFilter(List<Boolean> settings) {
 		this.filter = settings;
 	}
+
+	@Override
+	public Data getData() {
+		// TODO Auto-generated method stub
+		return this.data;
+	}
 	
 
 }

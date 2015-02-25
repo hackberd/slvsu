@@ -4,7 +4,7 @@ public class Animator extends Thread {
 
 	private Animation animation;
 	private boolean resume;
-	private boolean pause;
+	public boolean pause;
 	private int framesPerSecond;
 
 	public Animator(Animation animation){
@@ -35,6 +35,7 @@ public class Animator extends Thread {
 
 	public synchronized void pause(){
 		pause = true;
+		this.animation.paused();
 	}
 
 	public synchronized void go(){

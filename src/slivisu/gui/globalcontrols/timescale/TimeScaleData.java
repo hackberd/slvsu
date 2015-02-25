@@ -1,5 +1,9 @@
 package slivisu.gui.globalcontrols.timescale;
 
+import java.util.List;
+
+import slivisu.data.MyZeitscheibe;
+
 public interface TimeScaleData {
 
 	public void setGlobalMin(Integer globalMin);
@@ -16,4 +20,6 @@ public interface TimeScaleData {
 	public void update();
 	public void setFreezeRange(boolean selected);
 	public boolean isFreezeRange();
+	
+	public List<MyZeitscheibe> selectedZeitscheibene();
 }

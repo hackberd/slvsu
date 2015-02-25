@@ -18,6 +18,7 @@ import gov.nasa.worldwind.layers.Earth.CountryBoundariesLayer;
 import gov.nasa.worldwind.util.StatusBar;
 import gov.nasa.worldwind.view.orbit.BasicOrbitView;
 import gov.nasa.worldwind.view.orbit.FlatOrbitView;
+import gov.nasa.worldwindx.applications.worldwindow.core.ToolTipController;
 import gov.nasa.worldwindx.examples.util.LayerManagerLayer;
 
 import java.awt.BorderLayout;
@@ -72,6 +73,8 @@ public class SliGlobe extends JPanel implements InteractionListener {
 		this.wwd.addMouseListener(listener);
 		this.wwd.addSelectListener(listener);
 
+		
+		
 		this.flatGlobe = new EarthFlat();
 		this.roundGlobe = new Earth();
 		this.globe = roundGlobe;

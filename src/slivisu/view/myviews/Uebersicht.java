@@ -17,8 +17,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
 
-import com.sun.org.apache.xpath.internal.operations.Div;
-
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.datatype.Balken;
 import slivisu.gui.controller.InteractionListener;
@@ -32,7 +30,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	
 	// Variablen
 	private List<Balken> balken;
-	private SuperDataUebersicht data;
+	public SuperDataUebersicht data;
 	private UebersichtListener listener;
 	
 	private Graphics2D graphic;
@@ -129,7 +127,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			endSelection = null;
 			
 			//System.out.println(selectedZeitscheiben.size() + " , " + balken.size());
-			
+			this.data.getData().setCurrentZeitscheibe(selectedZeitscheiben);
 			data.selectZeitscheiben(selectedZeitscheiben);
 			repaint();
 		}
@@ -161,6 +159,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 				// Balken zeichnen
 				g2d.setColor(Color.RED);
 				for (Balken bar : balken) {
+					if (bar == null) return;
 					// berechne Koordinaten f�r Balken
 					xMin	= (int)	(				  PADDING + ( (double) (bar.getAnfang() - min) / (double) rangeTime) * (this.getWidth() - 2*PADDING));
 					xMax	= (int)	(this.getWidth() - PADDING - ( (double) (max - bar.getEnde()) / (double) rangeTime)   * (this.getWidth() - 2*PADDING));
@@ -227,8 +226,8 @@ public class Uebersicht extends JPanel implements InteractionListener {
 					} else {
 						cols = (int) (squares / 4) + 1;
 					}
-					int xColWidth = (int) ((xMax - xMin) / cols);
-					
+					//int xColWidth = (int) ((xMax - xMin) / cols);
+					int xColWidth = 3;
 					// zeichne
 					int xsq		= xMin - xColWidth;
 					int xsq2	= xMin;
@@ -252,7 +251,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 							ysq2 = yMax;
 						}
 						
-						g2d.setColor(Color.RED);
+						g2d.setColor(Color.GREEN);
 						g2d.fillRect(	xsq,
 								ysq,
 								(xsq2 - xsq),
@@ -281,7 +280,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 							ysq2 = yMax;
 						}
 						
-						g2d.setColor(Color.MAGENTA);
+						g2d.setColor(Color.RED);
 						g2d.fillRect(	xsq,
 								ysq,
 								(xsq2 - xsq),

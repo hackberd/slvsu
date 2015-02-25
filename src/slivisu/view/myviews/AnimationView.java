@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ public class AnimationView extends JPanel implements Animation  {
 	private Animator animator;
 	private SuperDataAnimationImpl data;
 	private JComboBox checkBox;
-	private JPanel contentView;
+	//private JPanel contentView;
 	private JSlider slider;
 	private int currentZsIndex = 0;
 	
@@ -102,7 +103,7 @@ public class AnimationView extends JPanel implements Animation  {
 		this.add(animationControlButton);
 		
 		final int heightTop = 25;
-		final int heightBottom = 50;
+		final int heightBottom = 75;
 		// Constaints lable
 		layout.putConstraint(SpringLayout.WEST,		dateLabel,	5,			SpringLayout.WEST,	this);
 		layout.putConstraint(SpringLayout.NORTH,	dateLabel,	5,			SpringLayout.NORTH,	this);
@@ -130,20 +131,20 @@ public class AnimationView extends JPanel implements Animation  {
 		
 		
 		
-		contentView = new JPanel();
+//		contentView = new JPanel();
 		
-		this.add(contentView);
-		layout.putConstraint(SpringLayout.WEST,		contentView,	5,			SpringLayout.WEST,	this);
-		layout.putConstraint(SpringLayout.NORTH,	contentView,	5,			SpringLayout.SOUTH,	dateLabel);
-		layout.putConstraint(SpringLayout.EAST,		contentView,	5,			SpringLayout.EAST,	this);
-		layout.putConstraint(SpringLayout.SOUTH,	contentView,	heightBottom,			SpringLayout.SOUTH,	dateLabel);
+		//this.add(contentView);
+//		layout.putConstraint(SpringLayout.WEST,		contentView,	5,			SpringLayout.WEST,	this);
+//		layout.putConstraint(SpringLayout.NORTH,	contentView,	5,			SpringLayout.SOUTH,	dateLabel);
+//		layout.putConstraint(SpringLayout.EAST,		contentView,	5,			SpringLayout.EAST,	this);
+//		layout.putConstraint(SpringLayout.SOUTH,	contentView,	heightBottom,			SpringLayout.SOUTH,	dateLabel);
 		
 		
 		slider = new JSlider(JSlider.HORIZONTAL, 0, 1000, 0); 
 		changeListener = new AnimationsChangeListener(this);
 		slider.addChangeListener(changeListener);
 
-		// TODO set this
+	
 		slider.setMajorTickSpacing(200); 
 		//slider.setMinorTickSpacing(20);
 		slider.setPaintTicks(true);
@@ -151,9 +152,9 @@ public class AnimationView extends JPanel implements Animation  {
 		
 		this.add(slider);
 		layout.putConstraint(SpringLayout.WEST,		slider,	5,			SpringLayout.WEST,	this);
-		layout.putConstraint(SpringLayout.NORTH,	slider,	5,			SpringLayout.SOUTH,	contentView);
+		layout.putConstraint(SpringLayout.NORTH,	slider,	heightBottom,SpringLayout.SOUTH,	dateLabel);
 		layout.putConstraint(SpringLayout.EAST,		slider,	5,			SpringLayout.EAST,	this);
-		layout.putConstraint(SpringLayout.SOUTH,	slider,	75,			SpringLayout.SOUTH,	contentView);
+		layout.putConstraint(SpringLayout.SOUTH,	slider,	heightBottom + 40,			SpringLayout.SOUTH,	dateLabel);
 		
 //		animationControlButton = new AnimationButton(animator);
 //
@@ -187,9 +188,9 @@ public class AnimationView extends JPanel implements Animation  {
 			
 			int xMin;
 			int xMax;
-			int yMin2		= 150;
-			int yMin		= 175;
-			int yMax		= 200;
+			int yMin2		= 28;
+			int yMin		= 53;
+			int yMax		= 78;
 			int min			= slider.getMinimum();
 			int max			= slider.getMaximum();
 			int rangeTime	= max- min;
@@ -204,7 +205,7 @@ public class AnimationView extends JPanel implements Animation  {
 						(xMax - xMin),
 						(yMax - yMin));
 				
-				g2d.setColor(Color.CYAN);
+				g2d.setColor(Color.WHITE);
 				g2d.fill(rect);
 				
 				g2d.setColor(Color.BLACK);
@@ -222,7 +223,7 @@ public class AnimationView extends JPanel implements Animation  {
 			
 			String name = aktuelleEbene.get(currentZsIndex).getName();
 			
-			g2d.setColor(Color.CYAN);
+			g2d.setColor(Color.WHITE);
 			g2d.fill(rect);
 			
 			g2d.setColor(Color.BLACK);
@@ -256,19 +257,39 @@ public class AnimationView extends JPanel implements Animation  {
 			//slider.setMinorTickSpacing((mt - 2) / 2);
 			slider.setPaintTicks(true);
 			slider.setPaintLabels(true);
+			
+			//
+			
+			// TODO Male die Zeitscheiben in contentView (copy paste aus Übersicht oder Detail?)
 		}
 	}
 
 	public void sliderChangedTo(int year) {
 		if (this.aktuelleEbene != null) {
 			Set<Sample> markSamples = new HashSet<Sample>();
+			LinkedList<MyZeitscheibe> currZs = new LinkedList<MyZeitscheibe>();
+			
+			int i = 0;
 			for (MyZeitscheibe zeitscheibe : this.aktuelleEbene) {
+				
 				if (zeitscheibe.getAnfang() <= year && zeitscheibe.getEnde() >= year) { 
 					markSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
 					data.setYear(year);
+					currZs.add(zeitscheibe);
+					this.currentZsIndex = i;
 				};
+				i++;
 			}	
-			this.data.data.getMarkedSamples().set(markSamples);
+			if (year != 0) {
+				this.data.data.setCurrentZeitscheibe(currZs);
+			}
+			
+			this.data.data.getSelectedSamples().set(markSamples);
+			
+			
+		
+			//for (int i = 0; i< this.aktuelleEbene.size())
+			repaint();
 		}
 		
 	}
@@ -276,19 +297,25 @@ public class AnimationView extends JPanel implements Animation  {
 	@Override
 	public void next() {
 		if (this.aktuelleEbene != null) {
-			repaint();
+			//repaint();
+			currentZsIndex++;
 			
-			if (this.aktuelleEbene.size() > currentZsIndex) {
+			if (this.aktuelleEbene.size() > currentZsIndex ) {
 				slider.setValue(this.aktuelleEbene.get(currentZsIndex).getAnfang());
-				currentZsIndex++;
+				
 			} else {
 				currentZsIndex = 0;
+				slider.setValue(this.aktuelleEbene.get(currentZsIndex).getAnfang());
 			}
 			
 			currentYearLable.setText("Y: "+slider.getValue());
 			//this.data.updateData(timeStep);
 		}
 		
+	}
+	
+	public void paused() {
+		this.data.data.setCurrentZeitscheibe(null);
 	}
 	
 }

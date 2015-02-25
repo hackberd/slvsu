@@ -35,6 +35,11 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 	private Map<Zeitscheibe, Wegenetz> wegenetz;
 	
 	private TimeRange timeRange;
+	private List<MyZeitscheibe> currentZeitscheibe;
+	public int currentEbene; 
+	
+	private Sample currentSample; // TODO
+	
 	
 	// ################################# Getter und Setter #################################
 
@@ -149,6 +154,18 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 //				System.out.println("lat " + netz.getLatOf(i) + " long " + netz.getLongOf(i));
 //			}
 //		}
+	}
+
+	
+	
+
+
+	public List<MyZeitscheibe> getCurrentZeitscheibe() {
+		return currentZeitscheibe;
+	}
+
+	public void setCurrentZeitscheibe(List<MyZeitscheibe> currentZeitscheibe) {
+		this.currentZeitscheibe = currentZeitscheibe;
 	}
 
 	public void setMarkedSamples(Selection<Sample> markedSamples) {

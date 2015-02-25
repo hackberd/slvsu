@@ -1,21 +1,29 @@
 package slivisu.gui.globalcontrols.timescale;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import slivisu.data.MyZeitscheibe;
+import slivisu.data.Zeitscheibe;
+import slivisu.data.datatype.Balken;
 import slivisu.gui.controller.InteractionListener;
+import slivisu.mapper.SlivisuColors;
 
 import com.visutools.nav.bislider.BiSlider;
 import com.visutools.nav.bislider.BiSliderEvent;
@@ -46,11 +54,65 @@ public class TimeScale extends JPanel implements InteractionListener {
 
 	public void updateView() {
 		changeTimeSlider();
+		repaint();
 	}
 
 	public BiSlider getTimeslider() {
 		return timeslider;
 	}
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.paintZS(g);;
+	}
+	
+	
+	
+	public void paintZS(Graphics g) {
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+				
+				
+				List<MyZeitscheibe> zsList = this.data.selectedZeitscheibene();
+				
+				if (zsList != null) {
+					double tsWidth = timeslider.getBounds().getWidth();
+					double oneYear = tsWidth / (this.data.getGlobalMax() - this.data.getGlobalMin());
+				
+					
+					double smallest = Math.abs(this.data.getGlobalMax() - this.data.getGlobalMin()) * oneYear;
+					
+					for (MyZeitscheibe zs : zsList) {
+						
+						if (zs.getAnfang() >= this.data.getGlobalMin() && zs.getEnde() <= this.data.getGlobalMax()) {
+							double posx = 0;
+							double posy = 0;
+							
+							g2d.setColor(SlivisuColors.neutral());
+							posx = Math.abs(this.data.getGlobalMin() - zs.getAnfang());
+							posx = oneYear * posx;
+							
+							if (posx < smallest) smallest = posx;
+							posy = Math.abs(zs.getEnde() - zs.getAnfang());
+							//System.out.println(posy);
+							posy = oneYear * posy;
+							//System.out.println("camp : " + posx + " " + 0 + " " + posy + " "+  0);
+							g2d.fillRect( (int)posx,(int) timeslider.getBounds().getY() , (int)posy, (int)timeslider.getBounds().getHeight() / 2);
+							
+							
+							
+						}
+					}
+					if (smallest != Math.abs(this.data.getGlobalMax() - this.data.getGlobalMin()) * oneYear) {
+						g2d.setColor(Color.black);
+						g2d.drawString("Sicherheiten",(int) smallest,(int) timeslider.getBounds().getY());
+					}
+					
+				}
+			
+	}
+	
+
 
 	private void initial() {
 		this.setLayout(new BorderLayout());
