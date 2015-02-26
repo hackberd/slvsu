@@ -65,4 +65,9 @@ public class DetailListener extends MouseAdapter {
 	public void mouseMoved(MouseEvent e) {
 		this.checkIfHit(e);
 	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+	}
 }

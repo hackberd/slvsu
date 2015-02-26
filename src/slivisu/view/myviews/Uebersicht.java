@@ -143,11 +143,11 @@ public class Uebersicht extends JPanel implements InteractionListener {
 		if (data != null) {
 			this.data.updateDataToSelectedData();
 			
-			MyZeitscheibe selZS = null;
+			List<MyZeitscheibe> selZS = new LinkedList<MyZeitscheibe>();
 			
 			if (balken != null) {
 				for (Balken bar : balken) {
-					if (bar.isSelected()) selZS = bar.getRelZeitscheibe();
+					if (bar.isSelected()) selZS.add(bar.getRelZeitscheibe());
 				}
 			}
 			
@@ -181,8 +181,10 @@ public class Uebersicht extends JPanel implements InteractionListener {
 											scheibe.getAnzahlSichereSiedlungen(),
 											scheibe.getAnzahlUnsichereSiedlungen(),
 											scheibe.getName()));
-					if (scheibe.equals(selZS)) {
-						balken.get(balken.size() - 1).setSelected(true);
+					for (MyZeitscheibe myZS : selZS) {
+						if (scheibe.equals(myZS)) {
+							balken.get(balken.size() - 1).setSelected(true);
+						}
 					}
 				}
 			}
