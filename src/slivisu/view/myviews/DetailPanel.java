@@ -41,6 +41,13 @@ public class DetailPanel extends JPanel {
 	private Map<Sample, List<Balken>> balkenForSample;
 	HashMap<Sample, List<List<Boolean>>> ebenenShowForSample;
 	
+	// TODO: Hier ist die Sortierte Liste der Samples definiert
+	private List<Sample> sortedSamples;
+	// TODO: Hier die analoge Liste zu den kompletten Einträgen (Name, Balken)
+	// entspricht dem Rahmen, der in paint gezeichnet wird
+	// sortedSample(1) hat dann das Rect rectforsortedsample(1)
+	private List<Rectangle2D> rectForSortedSamples;
+	
 	private int min;
 	private int max;
 	private int rangeTime	= 0;
@@ -351,5 +358,19 @@ public class DetailPanel extends JPanel {
 	public void setFilter(List<Boolean> settings) {
 		data.setFilter(settings);
 		updateView();
+	}
+	
+	// TODO: Button aktion wird nach hier runtergetragen
+	public void buttonClicked(String actionCommand) {
+		System.out.println(actionCommand);
+		if (actionCommand == "first") {
+			
+		} else if (actionCommand == "higher") {
+			
+		} else if (actionCommand == "lower") {
+			
+		} else if (actionCommand == "last") { 
+			
+		}
 	}
 }

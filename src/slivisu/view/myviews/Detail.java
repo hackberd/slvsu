@@ -1,8 +1,10 @@
 package slivisu.view.myviews;
 
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +26,8 @@ public class Detail extends JPanel implements InteractionListener{
 	
 	private DetailItemListener itemListener;
 	
+	private DetailActionListener actionListener;
+	
 	private JCheckBox filter1;
 	private JCheckBox filter2;
 	private JCheckBox filter3;
@@ -31,6 +35,10 @@ public class Detail extends JPanel implements InteractionListener{
 	private JCheckBox filter5;
 	private JCheckBox filter6;
 	private JCheckBox filter7;
+	private JButton first;
+	private JButton oneHigher;
+	private JButton oneLower;
+	private JButton last;
 	
 	public Detail(SuperDataDetail data) {
 		this.data	= data;
@@ -47,7 +55,13 @@ public class Detail extends JPanel implements InteractionListener{
 		filter6			= new JCheckBox("Sicher", true);
 		filter7			= new JCheckBox("Unsicher", true);
 		
+		first			= new JButton("als Erstes");
+		oneHigher		= new JButton("eins höher");
+		oneLower		= new JButton("eins tiefer");
+		last			= new JButton("als Letztes");
+		
 		itemListener	= new DetailItemListener(this);
+		actionListener	= new DetailActionListener(this);
 		
 		filter1.addItemListener(itemListener);
 		filter2.addItemListener(itemListener);
@@ -56,6 +70,16 @@ public class Detail extends JPanel implements InteractionListener{
 		filter5.addItemListener(itemListener);
 		filter6.addItemListener(itemListener);
 		filter7.addItemListener(itemListener);
+		
+		first.addActionListener(actionListener);
+		oneHigher.addActionListener(actionListener);
+		oneLower.addActionListener(actionListener);
+		last.addActionListener(actionListener);
+		
+		first.setActionCommand("first");
+		oneHigher.setActionCommand("higher");
+		oneLower.setActionCommand("lower");
+		last.setActionCommand("last");
 		
 		// TODO: adden
 		add(scrollPane);
@@ -66,6 +90,12 @@ public class Detail extends JPanel implements InteractionListener{
 		add(filter5);
 		add(filter6);
 		add(filter7);
+		
+		add(first);
+		add(oneHigher);
+		add(oneLower);
+		add(last);
+		
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		layout.putConstraint(SpringLayout.WEST,		scrollPane,	5,		SpringLayout.WEST,	this);
@@ -110,6 +140,27 @@ public class Detail extends JPanel implements InteractionListener{
 		layout.putConstraint(SpringLayout.EAST,		filter7,	100,SpringLayout.WEST,	filter7);
 		layout.putConstraint(SpringLayout.SOUTH,	filter7,	-5,	SpringLayout.SOUTH,	this);
 		
+		
+		layout.putConstraint(SpringLayout.WEST,		first,	5,	SpringLayout.EAST,	filter7);
+		layout.putConstraint(SpringLayout.NORTH,	first,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		first,	100,SpringLayout.WEST,	first);
+		layout.putConstraint(SpringLayout.SOUTH,	first,	-5,	SpringLayout.SOUTH,	this);
+		
+		layout.putConstraint(SpringLayout.WEST,		oneHigher,	5,	SpringLayout.EAST,	first);
+		layout.putConstraint(SpringLayout.NORTH,	oneHigher,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		oneHigher,	100,SpringLayout.WEST,	oneHigher);
+		layout.putConstraint(SpringLayout.SOUTH,	oneHigher,	-5,	SpringLayout.SOUTH,	this);
+		
+		layout.putConstraint(SpringLayout.WEST,		oneLower,	5,	SpringLayout.EAST,	oneHigher);
+		layout.putConstraint(SpringLayout.NORTH,	oneLower,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		oneLower,	100,SpringLayout.WEST,	oneLower);
+		layout.putConstraint(SpringLayout.SOUTH,	oneLower,	-5,	SpringLayout.SOUTH,	this);
+		
+		layout.putConstraint(SpringLayout.WEST,		last,	5,	SpringLayout.EAST,	oneLower);
+		layout.putConstraint(SpringLayout.NORTH,	last,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		last,	100,SpringLayout.WEST,	last);
+		layout.putConstraint(SpringLayout.SOUTH,	last,	-5,	SpringLayout.SOUTH,	this);
+		
 		this.setLayout(layout);
 		
 		setFilter();
@@ -137,5 +188,9 @@ public class Detail extends JPanel implements InteractionListener{
 		settings.add(filter7.isSelected());
 		
 		detail.setFilter(settings);
+	}
+
+	public void buttonClicked(String actionCommand) {
+		detail.buttonClicked(actionCommand);
 	}
 }
