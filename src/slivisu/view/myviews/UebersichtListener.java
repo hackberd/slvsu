@@ -64,16 +64,18 @@ public class UebersichtListener extends MouseAdapter {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		uebersicht.setEndSelection(e.getPoint());
-		uebersicht.uebersichtSelection();
-		uebersicht.repaint();
-		if (uebersicht.getStartSelection() == uebersicht.getEndSelection()) {
+		
+		if (uebersicht.getStartSelection().getX() == uebersicht.getEndSelection().getX() && uebersicht.getStartSelection().getY() == uebersicht.getEndSelection().getY()) {
 			for (Balken bar : uebersicht.getBalken()) {
+				System.out.println(bar.getRect());
 				if (bar != null && bar.getRect() != null && bar.getRect().contains(e.getPoint())) {
 					bar.setSelected(true);
 					break;
 				}		
 			}		
 		}
+		uebersicht.uebersichtSelection();
+		uebersicht.repaint();
 	}
 	
 	@Override
