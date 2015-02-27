@@ -7,6 +7,7 @@ public class DetailActionListener implements ActionListener {
 
 	private Detail detail;
 	
+	
 	public DetailActionListener(Detail detail) {
 		this.detail = detail;
 	}
