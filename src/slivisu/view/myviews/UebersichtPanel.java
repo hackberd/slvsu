@@ -6,18 +6,18 @@ package slivisu.view.myviews;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -26,15 +26,13 @@ import javax.swing.ToolTipManager;
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.datatype.Balken;
 import slivisu.gui.controller.InteractionListener;
-import slivisu.mapper.SlivisuColors;
 
-public class Uebersicht extends JPanel implements InteractionListener {
+public class UebersichtPanel extends JPanel implements InteractionListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	// Konstanten
 	private final int PADDING	= 5;
-	private final int PTOP		= 50;
 	
 	// Variablen
 	private List<Balken> balken;
@@ -51,105 +49,22 @@ public class Uebersicht extends JPanel implements InteractionListener {
 	private Point startSelection;
 	private Point endSelection;
 	
-	private UebersichtItemListener itemListener;
-	
-	private JCheckBox filter1;
-	private JCheckBox filter2;
-	private JCheckBox filter3;
-	private JCheckBox filter4;
-	private JCheckBox filter5;
-	
-	public JButton first;
-	
-	private SpringLayout layout;
-	
 	private List<Boolean> filter;
 	
 	public String tooltip;
 	
-	// TODO: Auswahl machen
+	public int zoom = 1;
 	
-	public Uebersicht(final SuperDataUebersicht data){
+	
+	public UebersichtPanel(SuperDataUebersicht data){
 		this.data = data;
-		
-		layout			= new SpringLayout();
-		
-		filter1			= new JCheckBox("Level 1", true);
-		filter2			= new JCheckBox("Level 2", true);
-		filter3			= new JCheckBox("Level 3", true);
-		filter4			= new JCheckBox("Level 4", true);
-		filter5			= new JCheckBox("Level 5", true);
-		
-		first			= new JButton("Selektion aufheben");
-		
-		first.addActionListener(new ActionListener() {
- 			@Override
-			public void actionPerformed(ActionEvent arg0) {
- 				for (Balken bar : getBalken()) {
-					bar.setSelected(false);
-				}
- 				data.resetSelectionToLastFocus();
-				
-			}
-        }); 
-		
-		itemListener	= new UebersichtItemListener(this); // UebersichtItemListener(this);
-		
-		filter1.addItemListener(itemListener);
-		filter2.addItemListener(itemListener);
-		filter3.addItemListener(itemListener);
-		filter4.addItemListener(itemListener);
-		filter5.addItemListener(itemListener);
 		
 		listener = new UebersichtListener(this);
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
 		
-		add(filter1);
-		add(filter2);
-		add(filter3);
-		add(filter4);
-		add(filter5);
-		add(first);
-		
-		
-	
-	
-		
-		layout.putConstraint(SpringLayout.WEST,		filter1,	PADDING,	SpringLayout.WEST,	this);
-		layout.putConstraint(SpringLayout.SOUTH,	filter1,	-PADDING,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	filter1,	-30,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		filter1,	75,	SpringLayout.WEST,	filter1);
-		
-		layout.putConstraint(SpringLayout.WEST,		filter2,	PADDING,	SpringLayout.EAST,	filter1);
-		layout.putConstraint(SpringLayout.SOUTH,	filter2,	-PADDING,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	filter2,	-30,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		filter2,	75,	SpringLayout.WEST,	filter2);
-		
-		layout.putConstraint(SpringLayout.WEST,		filter3,	PADDING,	SpringLayout.EAST,	filter2);
-		layout.putConstraint(SpringLayout.SOUTH,	filter3,	-PADDING,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	filter3,	-30,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		filter3,	75,	SpringLayout.WEST,	filter3);
-		
-		layout.putConstraint(SpringLayout.WEST,		filter4,	PADDING,	SpringLayout.EAST,	filter3);
-		layout.putConstraint(SpringLayout.SOUTH,	filter4,	-PADDING,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	filter4,	-30,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		filter4,	75,	SpringLayout.WEST,	filter4);
-		
-		layout.putConstraint(SpringLayout.WEST,		filter5,	PADDING,	SpringLayout.EAST,	filter4);
-		layout.putConstraint(SpringLayout.SOUTH,	filter5,	-PADDING,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	filter5,	-30,	SpringLayout.SOUTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		filter5,	75,	SpringLayout.WEST,	filter5);
-		
-		layout.putConstraint(SpringLayout.WEST,		first,	0,	SpringLayout.WEST,	this);
-		//layout.putConstraint(SpringLayout.SOUTH,	first,	40,	SpringLayout.NORTH,	this);
-		layout.putConstraint(SpringLayout.NORTH,	first,	PADDING,	SpringLayout.NORTH,	this);
-		layout.putConstraint(SpringLayout.EAST,		first,	100,	SpringLayout.WEST,	this);
-		
-		
 		ToolTipManager.sharedInstance().registerComponent( this);
 		ToolTipManager.sharedInstance().setInitialDelay(0) ;
-		
 	}
 	
 	public String getToolTipText( MouseEvent e )
@@ -227,7 +142,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			
 			// selection ermitteln
 			for (Balken bar : balken) {
-				if (bar != null &&bar.isSelected()) {
+				if (bar.isSelected()) {
 					selectedZeitscheiben.add(bar.getRelZeitscheibe());
 				}
 			}
@@ -235,14 +150,10 @@ public class Uebersicht extends JPanel implements InteractionListener {
 			startSelection = null;
 			endSelection = null;
 			
-			if (selectedZeitscheiben.size() > 0) {
-				this.data.getData().setCurrentZeitscheibe(selectedZeitscheiben);
-				data.selectZeitscheiben(selectedZeitscheiben);
-				repaint();
-			}
 			//System.out.println(selectedZeitscheiben.size() + " , " + balken.size());
-			//System.out.println("change");
-			this.data.getData().controller.receive();
+			this.data.getData().setCurrentZeitscheibe(selectedZeitscheiben);
+			data.selectZeitscheiben(selectedZeitscheiben);
+			repaint();
 		}
 	}
 	
@@ -280,18 +191,23 @@ public class Uebersicht extends JPanel implements InteractionListener {
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
 				g2d.setColor(Color.BLACK);
-				g2d.drawRect(PADDING, PTOP, this.getWidth() - 2*PADDING, this.getHeight() - PADDING - PTOP);
+				g2d.drawRect(PADDING, PADDING, this.getWidth() - 2*PADDING, this.getHeight() - PADDING - PADDING);
+				
+				// TODO: setSize hier, Konstanten f�r Gr��e?
+				setSize(this.getWidth(), this.getHeight());
+				setPreferredSize(new Dimension(this.getWidth(), this.getHeight()));
+				setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
 				
 				// Balken zeichnen
-				g2d.setColor(Color.RED);
+				g2d.setColor(Color.lightGray);
 				for (Balken bar : balken) {
 					if ((bar == null) || (!data.getFilter().get(bar.getEbene() - 1))) return;
 					// berechne Koordinaten f�r Balken
 					xMin	= (int)	(				  PADDING + ( (double) (bar.getAnfang() - min) / (double) rangeTime) * (this.getWidth() - 2*PADDING));
 					xMax	= (int)	(this.getWidth() - PADDING - ( (double) (max - bar.getEnde()) / (double) rangeTime)   * (this.getWidth() - 2*PADDING));
 					
-					yMin	= (int)	(				   PTOP + ( (double) (levelShowedBefore.get(bar.getEbene() - 1)) / (double) levelShowed) * (this.getHeight() - PADDING - PTOP));
-					yMax	= (int)	(this.getHeight() - PADDING - ( (double) (levelShowed - levelShowedBefore.get(bar.getEbene())) / (double) levelShowed)  * (this.getHeight() - PADDING - PTOP));
+					yMin	= (int)	(				   PADDING + ( (double) (levelShowedBefore.get(bar.getEbene() - 1)) / (double) levelShowed) * (this.getHeight() - PADDING - PADDING));
+					yMax	= (int)	(this.getHeight() - PADDING - ( (double) (levelShowed - levelShowedBefore.get(bar.getEbene())) / (double) levelShowed)  * (this.getHeight() - PADDING - PADDING));
 					
 					Rectangle2D rect = new Rectangle(	xMin,
 														yMin,
@@ -316,21 +232,14 @@ public class Uebersicht extends JPanel implements InteractionListener {
 					int ySplit	= 0;
 					
 					ySplit	= (int) (yMin + (yMax - yMin) * 0.5);
-//					if (this.data.getData().getWegenetz().containsKey(bar.getRelZeitscheibe())) {
-//						g2d.setColor(Color.cyan);
-//					} else {
-						g2d.setColor(SlivisuColors.colorForEbene(bar.getRelZeitscheibe().getEbene()));
-//					}
 					
+					g2d.setColor(Color.RED);
 					g2d.fillRect(	xMin,
 									yMin,
 									(xMax - xMin),
 									(ySplit - yMin));
-					
-					
-					g2d.setColor(Color.BLACK);
-					g2d.drawString((String.valueOf(bar.getAnfang()) + " - " + String.valueOf(bar.getEnde()) + " | " + bar.getName()), 
-									xMin, ySplit);
+					g2d.setColor(Color.WHITE);
+					g2d.drawString((String.valueOf(bar.getAnfang()) + " - " + String.valueOf(bar.getEnde()) + " | " + bar.getName()), xMin, ySplit);
 					
 					// sicher & unsicher
 					
@@ -402,7 +311,6 @@ public class Uebersicht extends JPanel implements InteractionListener {
 							ysq2 = yMax;
 						}
 						
-						//if (this.data.getData().getMarkedSamples().contains(bar.get))
 						g2d.setColor(Color.GREEN);
 						g2d.fillRect(	xsq,
 								ysq,
@@ -568,15 +476,7 @@ public class Uebersicht extends JPanel implements InteractionListener {
 		return endSelection;
 	}
 
-	public void setFilter() {
-		List<Boolean> settings = new LinkedList<Boolean>();
-		
-		settings.add(filter1.isSelected());
-		settings.add(filter2.isSelected());
-		settings.add(filter3.isSelected());
-		settings.add(filter4.isSelected());
-		settings.add(filter5.isSelected());
-		
+	public void setFilter(List<Boolean> settings) {
 		data.setFilter(settings);
 		updateView();
 	}
