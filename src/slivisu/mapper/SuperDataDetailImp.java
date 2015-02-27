@@ -1,11 +1,17 @@
 package slivisu.mapper;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import slivisu.data.Data;
 import slivisu.data.MyZeitscheibe;
@@ -128,9 +134,44 @@ public class SuperDataDetailImp implements SuperDataDetail {
 				return this.allZeitscheibenInternal;
 			}
 
-	@Override
-	public List<Sample> getAllSelectedSamples() {
-		return new LinkedList<Sample>(this.data.getSelectedSamples().getAll());
+	//@Override
+//	public List<Sample> getAllSelectedSamples() {
+//		return getAllSelectedSamples(SamplesSorting.NAME_ASC);
+//	}
+	
+	public enum SamplesSorting {
+	    NONE, NAME_ASC, NAME_DESC, REGION
+	}
+	
+	public List<Sample> getAllSelectedSamples(SamplesSorting sortingMode) {
+		LinkedList<Sample> allSamples = new LinkedList<Sample>(this.data.getSelectedSamples().getAll());
+		//allSamples =this.removeDuplicates(allSamples);
+		if (sortingMode == SamplesSorting.NAME_ASC) {
+			class NameSortingComeratorAsc implements Comparator<Sample> {
+			    @Override
+			    public int compare(Sample s1, Sample s2) {
+			        return s1.getGemeinde().compareTo(s2.getGemeinde());
+			    }
+			}
+			Collections.sort(allSamples, new NameSortingComeratorAsc());
+		} else if (sortingMode == SamplesSorting.NAME_DESC) {
+			class NameSortingComeratorDesc implements Comparator<Sample> {
+			    @Override
+			    public int compare(Sample s1, Sample s2) {
+			        return s2.getGemeinde().compareTo(s1.getGemeinde());
+			    }
+			}
+			Collections.sort(allSamples, new NameSortingComeratorDesc());
+		} else if (sortingMode == SamplesSorting.REGION) {
+			class NameSortingComeratorDesc implements Comparator<Sample> {
+			    @Override
+			    public int compare(Sample s1, Sample s2) {
+			        return s1.getRegion().compareTo(s2.getRegion());
+			    }
+			}
+			Collections.sort(allSamples, new NameSortingComeratorDesc());
+		}
+		return allSamples;
 	}
 
 	@Override
@@ -171,4 +212,11 @@ public class SuperDataDetailImp implements SuperDataDetail {
 		return allZeitscheibenInternal;
 	}
 
+	@Override
+	public Data getData() {
+		return this.data;
+	}
+
+
+	
 }

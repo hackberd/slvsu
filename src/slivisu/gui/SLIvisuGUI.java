@@ -84,7 +84,7 @@ public class SLIvisuGUI extends JFrame {
 		add(mainPanel, BorderLayout.CENTER);
 
 		setSize(1000, 700);
-		setPreferredSize(new Dimension(1000, 700));
+		setPreferredSize(new Dimension(1200, 700));
 		centerFrame();
 
 		pack();

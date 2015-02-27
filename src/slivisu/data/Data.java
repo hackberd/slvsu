@@ -38,7 +38,6 @@ public class Data implements DataInterface, SelectionListener<Sample>{
 	private List<MyZeitscheibe> currentZeitscheibe;
 	public int currentEbene; 
 	
-	private Sample currentSample; // TODO
 	
 	
 	// ################################# Getter und Setter #################################

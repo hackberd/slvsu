@@ -18,4 +18,9 @@ public class SlivisuColors {
    public static Color selectedBorder() {
 	   return Color.yellow;
    }
+   
+   public static Color colorForEbene(int i) {
+	   return Color.lightGray;
+   }
+   
 }
