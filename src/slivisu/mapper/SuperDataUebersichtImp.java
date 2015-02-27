@@ -151,7 +151,7 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 			Collection<Sample> selectedSamples = new LinkedList<Sample>();
 			for (MyZeitscheibe zeitscheibe : selectedZeitscheiben) {
 				selectedSamples.addAll(zeitscheibe.getAlleSamplesInZeitscheibe());
-				System.out.println("anz zs " + selectedZeitscheiben.size() +" s in zs " + zeitscheibe.getAlleSamplesInZeitscheibe().size() + " ausgabe s " +  selectedSamples.size());
+				//System.out.println("anz zs " + selectedZeitscheiben.size() +" s in zs " + zeitscheibe.getAlleSamplesInZeitscheibe().size() + " ausgabe s " +  selectedSamples.size());
 			}
 			if (selectedSamples.size() > 0) {  this.data.getSelectedSamples().set(selectedSamples);}
 			
@@ -211,9 +211,8 @@ public class SuperDataUebersichtImp implements SuperDataUebersicht {
 	
 	@Override
 	public void resetSelectionToLastFocus() {
-		if (this.lastFocus != null) {
-			this.allData = this.lastFocus;
-		}
+		this.data.setCurrentZeitscheibe(null);
+		this.data.getSelectedSamples().set(this.data.getAllSamples().getAll());
 	}
 
 	@Override

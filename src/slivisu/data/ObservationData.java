@@ -94,7 +94,7 @@ public class ObservationData {
 			}
 				
 		}
-		System.out.println("Zeitintervall von " + timeMin + " bis " + timeMax + " enthält " + gefilterteListe.size() + " Samples.");
+		//System.out.println("Zeitintervall von " + timeMin + " bis " + timeMax + " enthält " + gefilterteListe.size() + " Samples.");
 		return gefilterteListe;
 	}
 

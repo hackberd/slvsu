@@ -4,18 +4,18 @@
 
 DONE - Auf Einzelne Ebene einschränken 
 DONE - Zeitachse an Selection anpassen
-DONE - Globale Farbcodierung?
+DONE - Globale Farbcodierung
 DONE - Aktuell Ausgewähle ZS markieren
 
-DONE - Treffer auf 5 pro spalte einschr�nken
-DONE - trennlinie nach 25 zum besseren z�hlen
+DONE - Treffer auf 5 pro spalte einschr�nken
+DONE - trennlinie nach 25 zum besseren z�hlen
 
 Ü5: 20 // Detail 
 - Selektion einzelner Siedlungen
 - Anpassung der Zeitachse an Selektion
-- Sortieren
+DONE - Sortieren
 - Region auswählen
-- Mouseover -> Anzeige in Übersicht
+DONE - Mouseover -> Anzeige auf Karte (wird marked sample)
 
 Ü6: 20 // Karte
 - Codierung Ebene
@@ -25,13 +25,8 @@ DONE - Codierung global!
 
 // Animation
 - Steuerungsfunktionalität (Geschwindigkeit, usw)
-DONE - Aktulisierung der Fundauswahl
-- Anzeige aktueller Zeitschritt in: Zeitleiste, Histogramm DONE,  Detaildarstellung DONE, Übersicht DONE
+DONE - Aktulisierung der FundauswahlDONE - Anzeige aktueller Zeitschritt in: Zeitleiste DONE, Histogramm DONE,  Detaildarstellung DONE, Übersicht DONE
 
-// Wegnetz anzeigen 
-- button/knopf/irgendwas zum ein uns ausschalten am besten im overlay view auf zeitscheiben, die ein Weegnetz haben
 
 DONE - ZS-> Aktuell betrachtete Zeitscheibe  anzeigen
 DONE - Fix animattion overlay bug
-
-55 Punkte möglich

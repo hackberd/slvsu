@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
+import javax.swing.SortOrder;
 import javax.swing.ToolTipManager;
 
 import slivisu.data.Sample;
 import slivisu.data.datatype.Balken;
 //import com.sun.javafx.geom.Dimension2D;
 import slivisu.data.MyZeitscheibe;
+import slivisu.mapper.SuperDataDetailImp.SamplesSorting;
 
 public class DetailPanel extends JPanel {
 
@@ -41,25 +43,24 @@ public class DetailPanel extends JPanel {
 	private Map<Sample, List<Balken>> balkenForSample;
 	HashMap<Sample, List<List<Boolean>>> ebenenShowForSample;
 	
-	// TODO: Hier ist die Sortierte Liste der Samples definier
-	private List<Sample> sortedSamples;
-	// TODO: Hier die analoge Liste zu den kompletten Einträgen (Name, Balken)
-	// entspricht dem Rahmen, der in paint gezeichnet wird
-	// sortedSample(1) hat dann das Rect rectforsortedsample(1)
-	private List<Rectangle2D> rectForSortedSamples;
+	public Map<Rectangle, Sample> rectsAufSamples; 
 	
 	private int min;
 	private int max;
 	private int rangeTime	= 0;
 	private int rangeEbenen	= 0;
 
+	private Detail detailView;
+	
+	private SamplesSorting sorting = SamplesSorting.NAME_ASC;
+	
 	public String tooltip;
 
 	private List<Boolean> filter;
 	
-	public DetailPanel(SuperDataDetail data) {
+	public DetailPanel(SuperDataDetail data, Detail detail) {
 		this.data = data;
-		
+		this.detailView = detail;
 		listener = new DetailListener(this);
 		addMouseListener(listener);
 		addMouseMotionListener(listener);
@@ -105,7 +106,7 @@ public class DetailPanel extends JPanel {
 			min	= Integer.MAX_VALUE;
 			max	= Integer.MIN_VALUE;
 			
-			for (Sample sample : data.getAllSelectedSamples()) {
+			for (Sample sample : data.getAllSelectedSamples(sorting)) {
 				balken	= new LinkedList<Balken>();
 				LinkedList<List<Boolean>> linkedList =  new LinkedList<List<Boolean>>();
 				for (int i = 1; i <= 5; i++) {
@@ -128,7 +129,7 @@ public class DetailPanel extends JPanel {
 							unsicher	= 0;
 							
 							if (ebenenShowForSample != null && !ebenenShowForSample.containsKey(sample)) return;
-							if (ebenenShowForSample.get(sample).size() < cntEbene && ebenenShowForSample.get(sample).get(cntEbene-1) != null) return;
+							if (ebenenShowForSample.get(sample).size() < cntEbene && ebenenShowForSample.get(sample).get(cntEbene-1) == null) return;
 							if (map.get(myZeitscheibe) ) {
 								ebenenShowForSample.get(sample).get(cntEbene-1).set(0, true);
 								sicher++;
@@ -189,13 +190,15 @@ public class DetailPanel extends JPanel {
 				Graphics2D g2d = (Graphics2D) g;
 				
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-				
+				int start = 0;
+				this.rectsAufSamples = new HashMap<Rectangle, Sample>();
 				// auszugehen, dass alle samples zeitscheiben haben
-				for (Sample sample : data.getAllSelectedSamples()) {
+				for (Sample sample : data.getAllSelectedSamples(sorting)) {
 //					Sample sample = data.getAllSelectedSamples().get(0);
 					// TODO: fï¿½r sortieren eine eigene Liste mit Samples
 					
 					lastBarY	= lastDetailY + PADDING;
+					start = lastBarY;
 					curLevel	= 1;
 					mapSicherheit	= data.zsForSampleWithSicher(sample, curLevel);
 					
@@ -258,12 +261,14 @@ public class DetailPanel extends JPanel {
 						}
 						
 						// Farbe sicher oder unsicher?
-						if (!mapSicherheit.containsKey(bar.getRelZeitscheibe())) return;
-						if (mapSicherheit.get(bar.getRelZeitscheibe())) {
-							g2d.setColor(Color.GREEN);
-						} else {
-							g2d.setColor(Color.RED);
+						if (mapSicherheit != null && mapSicherheit.containsKey(bar.getRelZeitscheibe())){
+							if (mapSicherheit.get(bar.getRelZeitscheibe())) {
+								g2d.setColor(Color.GREEN);
+							} else {
+								g2d.setColor(Color.RED);
+							}
 						}
+						
 						
 						g2d.fill(rect);
 						
@@ -290,6 +295,11 @@ public class DetailPanel extends JPanel {
 							sample.getGemeinde(),
 							2 * PADDING,
 							lastDetailY + 5 * PADDING);
+					
+					g2d.drawString(
+							sample.getRegion(),
+							2 * PADDING,
+							lastDetailY + 8 * PADDING);
 					
 					// Rahmen zeichnen (nach Balken, damit Hï¿½he bekannt)
 					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
@@ -340,6 +350,8 @@ public class DetailPanel extends JPanel {
 						
 					}
 					
+					this.rectsAufSamples.put(new Rectangle(0, start, getWidth(), lastBarY), sample);
+					
 					lastDetailY = lastBarY + PADDING;
 				}
 				
@@ -362,15 +374,20 @@ public class DetailPanel extends JPanel {
 	
 	// TODO: Button aktion wird nach hier runtergetragen
 	public void buttonClicked(String actionCommand) {
-		System.out.println(actionCommand);
-		if (actionCommand == "first") {
+		//System.out.println(actionCommand);
+		if (actionCommand == "none") {
+			this.sorting = SamplesSorting.REGION;
+		} else if (actionCommand == "name-asc") {
+			if (this.sorting == SamplesSorting.NAME_ASC) {
+				this.sorting = SamplesSorting.NAME_DESC;
+				this.detailView.oneHigher.setText("Name A-Z");
+			} else {
+				this.sorting = SamplesSorting.NAME_ASC;
+				this.detailView.oneHigher.setText("Name Z-A");
+			}
 			
-		} else if (actionCommand == "higher") {
-			
-		} else if (actionCommand == "lower") {
-			
-		} else if (actionCommand == "last") { 
-			
-		}
+		} 
+		updateView();
+		repaint();
 	}
 }

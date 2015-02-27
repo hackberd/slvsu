@@ -3,10 +3,15 @@ package slivisu.view.myviews;
 import java.util.List;
 import java.util.Map;
 
+import slivisu.data.Data;
 import slivisu.data.MyZeitscheibe;
 import slivisu.data.Sample;
+import slivisu.mapper.SuperDataDetailImp.SamplesSorting;
 
 public interface SuperDataDetail {
+	
+	public Data getData() ;
+	
 	/***
 	 * Update Data to selected Data
 	 */
@@ -16,7 +21,7 @@ public interface SuperDataDetail {
 	 * Alle Selected Samples
 	 * @return List<Sample>  alle Samples
 	 */
-	public List<Sample> getAllSelectedSamples();
+	public List<Sample> getAllSelectedSamples(SamplesSorting sortingMode);
 	
 	/***
 	 * Gibt alle Zeitscheiben des Samples mit Sicher
