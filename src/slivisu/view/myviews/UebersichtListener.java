@@ -9,19 +9,19 @@ import slivisu.data.datatype.Balken;
 public class UebersichtListener extends MouseAdapter {
 	
 	// TODO einlagern 
-	private Uebersicht uebersicht;
+	private UebersichtPanel uebersichtPanel;
 	
-	public UebersichtListener(Uebersicht uebersicht) {
+	public UebersichtListener(UebersichtPanel uebersichtPanel) {
 		// TODO Auto-generated constructor stub
-		this.uebersicht	= uebersicht;
+		this.uebersichtPanel	= uebersichtPanel;
 	}
 
 	private void checkIfHit(MouseEvent e) {
-		if (uebersicht.getBalken() != null) {
+		if (uebersichtPanel.getBalken() != null) {
 			Point mPoint = e.getPoint();
 			String text;
 			String tooltip = "<html>";
-			for (Balken bar : uebersicht.getBalken()) {
+			for (Balken bar : uebersichtPanel.getBalken()) {
 				if (bar != null) {
 					text = "";
 					if (bar != null && bar.getRect() != null && mPoint != null && bar.getRect().contains(mPoint)) {
@@ -35,16 +35,16 @@ public class UebersichtListener extends MouseAdapter {
 					} else if (bar.isHit()) {
 						bar.setHit(false);
 					}
-					uebersicht.repaint();
+					uebersichtPanel.repaint();
 //					((Uebersicht) e.getSource()).setToolTipText(text);
 				}
 				
 			}
 			tooltip+="</html>";
 			if (tooltip == "<html></html>") {
-				 ((Uebersicht) e.getSource()).tooltip = null;
+				 ((UebersichtPanel) e.getSource()).tooltip = null;
 			} else {
-				 ((Uebersicht) e.getSource()).tooltip = tooltip;
+				 ((UebersichtPanel) e.getSource()).tooltip = tooltip;
 			}
 			
 		}
@@ -57,16 +57,16 @@ public class UebersichtListener extends MouseAdapter {
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		uebersicht.setEndSelection(e.getPoint());
-		uebersicht.repaint();
+		uebersichtPanel.setEndSelection(e.getPoint());
+		uebersichtPanel.repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		uebersicht.setEndSelection(e.getPoint());
+		uebersichtPanel.setEndSelection(e.getPoint());
 		
-		if (uebersicht.getStartSelection().getX() == uebersicht.getEndSelection().getX() && uebersicht.getStartSelection().getY() == uebersicht.getEndSelection().getY()) {
-			for (Balken bar : uebersicht.getBalken()) {
+		if (uebersichtPanel.getStartSelection().getX() == uebersichtPanel.getEndSelection().getX() && uebersichtPanel.getStartSelection().getY() == uebersichtPanel.getEndSelection().getY()) {
+			for (Balken bar : uebersichtPanel.getBalken()) {
 				System.out.println(bar.getRect());
 				if (bar != null && bar.getRect() != null && bar.getRect().contains(e.getPoint())) {
 					bar.setSelected(true);
@@ -74,13 +74,13 @@ public class UebersichtListener extends MouseAdapter {
 				}		
 			}		
 		}
-		uebersicht.uebersichtSelection();
-		uebersicht.repaint();
+		uebersichtPanel.uebersichtSelection();
+		uebersichtPanel.repaint();
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		uebersicht.setStartSelection(e.getPoint());
-		uebersicht.repaint();
+		uebersichtPanel.setStartSelection(e.getPoint());
+		uebersichtPanel.repaint();
 	}
 }
