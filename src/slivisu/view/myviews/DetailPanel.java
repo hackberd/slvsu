@@ -41,7 +41,7 @@ public class DetailPanel extends JPanel {
 	private Map<Sample, List<Balken>> balkenForSample;
 	HashMap<Sample, List<List<Boolean>>> ebenenShowForSample;
 	
-	// TODO: Hier ist die Sortierte Liste der Samples definiert
+	// TODO: Hier ist die Sortierte Liste der Samples definier
 	private List<Sample> sortedSamples;
 	// TODO: Hier die analoge Liste zu den kompletten Einträgen (Name, Balken)
 	// entspricht dem Rahmen, der in paint gezeichnet wird
