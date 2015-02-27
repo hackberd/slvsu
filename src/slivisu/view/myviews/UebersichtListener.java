@@ -65,24 +65,14 @@ public class UebersichtListener extends MouseAdapter {
 	public void mouseReleased(MouseEvent e) {
 		uebersicht.setEndSelection(e.getPoint());
 		
-		
-		if (uebersicht.getBalken() != null && uebersicht.getStartSelection().getX() == uebersicht.getEndSelection().getX() && uebersicht.getStartSelection().getY() == uebersicht.getEndSelection().getY()) {
-			Boolean hit = false;
+		if (uebersicht.getStartSelection().getX() == uebersicht.getEndSelection().getX() && uebersicht.getStartSelection().getY() == uebersicht.getEndSelection().getY()) {
 			for (Balken bar : uebersicht.getBalken()) {
-				//System.out.println(bar.getRect());
+				System.out.println(bar.getRect());
 				if (bar != null && bar.getRect() != null && bar.getRect().contains(e.getPoint())) {
-					bar.setSelected(!bar.isSelected());
-					hit = true;
+					bar.setSelected(true);
 					break;
 				}		
-			}
-			if (!hit) { // Deselecten
-				for (Balken bar : uebersicht.getBalken()) {
-					bar.setSelected(false);
-				}
-				this.uebersicht.data.getData().setCurrentZeitscheibe(null);
-				this.uebersicht.data.getData().controller.receive();
-			}
+			}		
 		}
 		uebersicht.uebersichtSelection();
 		uebersicht.repaint();

@@ -1,11 +1,8 @@
 package slivisu.view.myviews;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,9 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpringLayout;
 
-import slivisu.data.Sample;
-import slivisu.data.datatype.Balken;
-import slivisu.data.selection.Selection;
 import slivisu.gui.controller.InteractionListener;
 
 public class Detail extends JPanel implements InteractionListener{
@@ -41,15 +35,16 @@ public class Detail extends JPanel implements InteractionListener{
 	private JCheckBox filter5;
 	private JCheckBox filter6;
 	private JCheckBox filter7;
-	public JButton first;
-	public JButton oneHigher;
-	
+	private JButton first;
+	private JButton oneHigher;
+	private JButton oneLower;
+	private JButton last;
 	
 	public Detail(SuperDataDetail data) {
 		this.data	= data;
 		
 		layout			= new SpringLayout();
-		detail			= new DetailPanel(data, this);
+		detail			= new DetailPanel(data);
 		scrollPane		= new JScrollPane(detail);
 		
 		filter1			= new JCheckBox("Level 1", true);
@@ -60,16 +55,13 @@ public class Detail extends JPanel implements InteractionListener{
 		filter6			= new JCheckBox("Sicher", true);
 		filter7			= new JCheckBox("Unsicher", true);
 		
-		first			= new JButton("Region");
-		oneHigher		= new JButton("Name Z-A");
+		first			= new JButton("als Erstes");
+		oneHigher		= new JButton("eins höher");
+		oneLower		= new JButton("eins tiefer");
+		last			= new JButton("als Letztes");
 		
 		itemListener	= new DetailItemListener(this);
 		actionListener	= new DetailActionListener(this);
-		
-		
-		detail.addMouseListener(actionListener);
-		detail.addMouseMotionListener(actionListener);
-		
 		
 		filter1.addItemListener(itemListener);
 		filter2.addItemListener(itemListener);
@@ -81,9 +73,13 @@ public class Detail extends JPanel implements InteractionListener{
 		
 		first.addActionListener(actionListener);
 		oneHigher.addActionListener(actionListener);
+		oneLower.addActionListener(actionListener);
+		last.addActionListener(actionListener);
 		
-		first.setActionCommand("none");
-		oneHigher.setActionCommand("name-asc");
+		first.setActionCommand("first");
+		oneHigher.setActionCommand("higher");
+		oneLower.setActionCommand("lower");
+		last.setActionCommand("last");
 		
 		// TODO: adden
 		add(scrollPane);
@@ -97,7 +93,8 @@ public class Detail extends JPanel implements InteractionListener{
 		
 		add(first);
 		add(oneHigher);
-	
+		add(oneLower);
+		add(last);
 		
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
@@ -154,15 +151,15 @@ public class Detail extends JPanel implements InteractionListener{
 		layout.putConstraint(SpringLayout.EAST,		oneHigher,	100,SpringLayout.WEST,	oneHigher);
 		layout.putConstraint(SpringLayout.SOUTH,	oneHigher,	-5,	SpringLayout.SOUTH,	this);
 		
-//		layout.putConstraint(SpringLayout.WEST,		oneLower,	5,	SpringLayout.EAST,	oneHigher);
-//		layout.putConstraint(SpringLayout.NORTH,	oneLower,	5,	SpringLayout.SOUTH,	scrollPane);
-//		layout.putConstraint(SpringLayout.EAST,		oneLower,	100,SpringLayout.WEST,	oneLower);
-//		layout.putConstraint(SpringLayout.SOUTH,	oneLower,	-5,	SpringLayout.SOUTH,	this);
-//		
-//		layout.putConstraint(SpringLayout.WEST,		last,	5,	SpringLayout.EAST,	oneLower);
-//		layout.putConstraint(SpringLayout.NORTH,	last,	5,	SpringLayout.SOUTH,	scrollPane);
-//		layout.putConstraint(SpringLayout.EAST,		last,	100,SpringLayout.WEST,	last);
-//		layout.putConstraint(SpringLayout.SOUTH,	last,	-5,	SpringLayout.SOUTH,	this);
+		layout.putConstraint(SpringLayout.WEST,		oneLower,	5,	SpringLayout.EAST,	oneHigher);
+		layout.putConstraint(SpringLayout.NORTH,	oneLower,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		oneLower,	100,SpringLayout.WEST,	oneLower);
+		layout.putConstraint(SpringLayout.SOUTH,	oneLower,	-5,	SpringLayout.SOUTH,	this);
+		
+		layout.putConstraint(SpringLayout.WEST,		last,	5,	SpringLayout.EAST,	oneLower);
+		layout.putConstraint(SpringLayout.NORTH,	last,	5,	SpringLayout.SOUTH,	scrollPane);
+		layout.putConstraint(SpringLayout.EAST,		last,	100,SpringLayout.WEST,	last);
+		layout.putConstraint(SpringLayout.SOUTH,	last,	-5,	SpringLayout.SOUTH,	this);
 		
 		this.setLayout(layout);
 		
@@ -195,33 +192,5 @@ public class Detail extends JPanel implements InteractionListener{
 
 	public void buttonClicked(String actionCommand) {
 		detail.buttonClicked(actionCommand);
-	}
-
-	public void isHit(MouseEvent arg0, boolean b) {
-		
-		if (this.detail.rectsAufSamples != null){
-			
-			for (Rectangle rect : this.detail.rectsAufSamples.keySet()) {
-					if (rect != null && rect.contains(arg0.getPoint())) {
-						LinkedList<Sample> col = new LinkedList<Sample>();
-						col.add(this.detail.rectsAufSamples.get(rect));
-						//System.out.println("selecte" +  this.detail.rectsAufSamples.get(rect));
-						if (!b) {
-							if (this.data.getData().getMarkedSamples().getAll().size() == 1 && this.data.getData().getMarkedSamples().contains(this.detail.rectsAufSamples.get(rect))) {
-								
-							} else {this.data.getData().getMarkedSamples().set(col);}
-							
-						} else {
-							if (this.data.getData().getSelectedSamples().getAll().size() == 1 && this.data.getData().getSelectedSamples().contains(this.detail.rectsAufSamples.get(rect))) {
-								
-							} else {this.data.getData().getSelectedSamples().set(col);}
-							
-						}
-						
-						//this.data.getData().controller.receive();
-					}
-				
-			}
-		}
 	}
 }

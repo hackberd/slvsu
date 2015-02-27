@@ -101,7 +101,6 @@ public class SlivisuGlobeData implements GlobeData {
 									double wert = this.data.getObservationData().getDatierung(sample).get(zs.getOriginalZeitscheibe());
 									if (wert == 1) {
 										globePoint.setColor(SlivisuColors.sicher());
-										break; // Ist in einer zs sicher
 									} else {
 										globePoint.setColor(SlivisuColors.unsicher());
 									}
